@@ -1,3 +1,8 @@
+body{
+    background-color: rgb(238, 238, 238);
+    color: rgb(0, 182, 127);
+}
+
 nav{
     display: flex;
     align-items: center;
@@ -15,15 +20,15 @@ nav{
 
 .c-nav-links li a{
     text-decoration: none;
-    color: rgb(32, 65, 156);
     padding: 5px 0;
     position: relative;
+    color: rgb(0, 182, 127);
 }
 
 .c-nav-links li a::after{
     content: '';
     background: #ff3d00;
-    width: 0;
+    width: 0%;
     height: 2px;
     position: absolute;
     bottom: 0;
@@ -33,4 +38,21 @@ nav{
 
 .c-nav-links li a:hover::after{
     width: 100%;
+}
+
+.c-layout {
+    border: 1rem solid #C6C6C6;
+    background-color: #E2E2E2;
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+  
+.c-layout__item {
+background-color: #fff;
+border: .5rem solid #AAAAAA;
+padding: 6rem min(15rem,40%);
+text-align: center;
+margin: 40px;
 }
