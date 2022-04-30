@@ -11,3 +11,5 @@ protobuf==3.19.4
 pyparsing==3.0.7
 six==1.16.0
 Werkzeug==2.0.3
+Flask-SocketIO==5.1.1
+python-socketio==5.5.2
