@@ -8,6 +8,11 @@
     <title>Shower Monitor</title>
     <script src="script/dataHandler.js"></script>
     <script src="script/app.js"></script>
+    <script
+      src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+      integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+      crossorigin="anonymous"
+    ></script>
 </head>
 <body>
     <div class="header">
@@ -38,6 +43,21 @@
             <div class="c-layout__item">
                 <H2>Daily water usage</H2>
                 <p>grafiek met percentage water verbuik tov het doel</p>
+                <div class="container">
+                    <div class="card">
+                        <div class="box">
+                            <div class="percent js-daily-goal" percent="90">
+                                <svg>
+                                    <circle cx="70" cy="70" r="70"></circle>
+                                    <circle class="js-second-circle c-second-circle"cx="70" cy="70" r="70"></circle>
+                                </svg>
+                                <div class="number">
+                                    <H2>90<span>%</span></H2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="c-layout__item">
                 <h2>Daily water goal</h2>
