@@ -142,6 +142,7 @@ a:focus {
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
+    
 
 }
 
@@ -152,7 +153,7 @@ a:focus {
         /* padding: 48px 48px 0 48px; */
     }
 
-    h1
+    .c-nav__title
     {
         font-size: 58px;
         line-height: 64px;
@@ -207,7 +208,17 @@ nav{
     width: 100%;
 }
 
+@media (max-width: 576px) {
+    .c-nav__title{
+        font-size: 24px;
+    }
+
+}
+
+
 .c-layout {
+    display: -webkit-flex;
+    display: -ms-flexbox;
     margin-top: 1rem;
     display: flex;
     flex-wrap: wrap;
@@ -223,10 +234,20 @@ nav{
     height: 300px;
     text-align: center;
     /* margin: 0p 0px 90px 0px; */
-    margin: 0 -20px;
-    padding: 0 20px;
     box-shadow: 1px 1px 3px 3px rgb(242, 244, 246);
 }
+
+.c-layout--gutter{
+    margin: 0 -16px;
+}
+
+.c-layout--gutter > .c-layout__item{
+    margin: 0 16px 32px;
+}
+
+
+
+
 
 
 
