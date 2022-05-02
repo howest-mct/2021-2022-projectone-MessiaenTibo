@@ -361,3 +361,26 @@ svg circle:nth-child(2)
 /* .card:hover .text{
     color: #fff;
 } */
+
+
+
+
+
+
+.c-username,
+.c-pswd,
+.c-create-new-account{
+    display: block;
+    line-height: 20px;
+}
+.c-loggin{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    line-height: 50px;
+}
+.c-loggin-placeholder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
