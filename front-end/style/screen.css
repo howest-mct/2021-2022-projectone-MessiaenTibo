@@ -416,6 +416,7 @@ footer{
     justify-content: center;
     margin: 0 -24px;
     min-height: 100px;
+    margin-top: 20px;
 }
 
 .c-footer-links li{
