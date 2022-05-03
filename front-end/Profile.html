@@ -4,15 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script/dataHandler.js"></script>
+    <script src="script/app.js"></script>
     <title>Profile</title>
+    <link rel="stylesheet" href="./style/screen.css">
 </head>
 <body>
-    <h1>Profile</h1>
-    <ul>
-        <li><a href="./Shower-Monitor.html">Home</a></li>
-        <li><a href="./Profile.html">Profile</a></li>
-        <li><a href="./Loggin.html">Quit</a></li>
-    </ul>
+    <div class="header">
+        <nav>
+            <h1 class="c-nav__title js-nav-title">Profile</h1>
+            <ul class="c-nav-links js-nav-title">
+                <li><a href="./Shower-Monitor.html">Home</a></li>
+                <li><a href="./Profile.html">Profile</a></li>
+                <li><a href="./Loggin.html">Quit</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="c-profile-placeholder">
+        <fieldset class="c-profile js-profile">
+            <legend>Profile</legend>
+            <div class="c-name js-name">
+                <label class="c-username" for="first-name"><b>First name</b></label>
+                <input type="text" class="c-username" placeholder="Enter name" name="first-name" id="first-name" required>
+            </div>
+            <div class="c-voornaam js-voornaam">
+                <label class="c-voornaam" for="last-name"><b>Last name</b></label>
+                <input type="text" class="c-voornaam" placeholder="Enter last name" name="last-name" id="last-name" required>
+            </div>
+            <div class="c-email js-email">
+                <label class="c-email" for="email"><b>Email</b></label>
+                <input type="email" class="c-email" placeholder="Enter email" name="email" id="email" required>
+            </div>
+            <div class="c-number js-number">
+                <label class="c-number" for="number"><b>Number</b></label>
+                <input type="tel" class="c-number" placeholder="Enter number" name="number" id="number" required>
+            </div>
+        </fieldset>
+    </div>
 
 </body>
 </html>
