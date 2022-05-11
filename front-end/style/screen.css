@@ -17,6 +17,7 @@ body{
     color: rgb(0, 0, 172);
     margin: 0;
     padding: 0;
+    position: relative;
 }
 
 img
@@ -415,11 +416,18 @@ footer{
     align-items: flex-start;
     justify-content: center;
     margin: 0 -24px;
-    min-height: 100px;
-    margin-top: 20px;
+    min-height: calc(7vh + 24px);
 }
 
 .c-footer-links li{
     display: inline-block;
     margin: 20px 50px;
+}
+
+main{
+    min-height: 73vh;
+}
+
+header{
+    min-height: 15vh;
 }
