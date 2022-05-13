@@ -2,26 +2,7 @@
   #FONTS
 \*------------------------------------*/
 
-@font-face {
-    font-family: "HK Grotesk Web";
-    font-weight: 200;
-    src: url("../fonts/hkgrotesk-light-webfont.woff2") format("woff2"),
-         url("../fonts/hkgrotesk-light-webfont.woff") format("woff");
-}
 
-@font-face {
-    font-family: "HK Grotesk Web";
-    font-weight: 400;
-    src: url("../fonts/hkgrotesk-regular-webfont.woff2") format("woff2"),
-         url("../fonts/hkgrotesk-regular-webfont.woff") format("woff");
-}
-
-@font-face {
-    font-family: "HK Grotesk Web";
-    font-weight: 600;
-    src: url("../fonts/hkgrotesk-medium-webfont.woff2") format("woff2"),
-         url("../fonts/hkgrotesk-medium-webfont.woff") format("woff");
-}
 
 /*------------------------------------*\
   #GENERIC
@@ -36,11 +17,20 @@
 html {
     font-size: 16px;
     line-height: 1.5;
-    font-family: "HK Grotesk Web", Helvetica, arial, sans-serif;
-    color: #202024;
-    box-sizing: border-box;
+    font-family: "helvetica neue", Helvetica, Arial, sans-serif;
+    color: rgb(0, 0, 172);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+    padding: 0px 24px 0px;
+}
+
+body{
+    background-color: rgb(250, 251, 252);
+    color: rgb(0, 0, 172);
+    margin: 0;
+    padding: 0;
+    position: relative;
 }
 
 *,
@@ -90,34 +80,30 @@ img {
     Default markup for typographic elements
 */
 
-h1,
-h2,
-h3 {
-    font-weight: 200;
-}
-
 h1 {
+    font-family: 'Times New Roman', Times, serif,;
     font-size: 36px;
-    line-height: 48px;
-    margin: 0 0 24px;
+    font-weight: normal;
+    line-height: 40px;
+    margin: 0 0 48px;
 }
 
 h2 {
-    font-size: 32px;
-    line-height: 40px;
-    margin: 0 0 24px;
+    font-size: 23px;
+    line-height: 32px;
+    margin: 0 0 24;
 }
 
 h3 {
-    font-size: 26px;
-    line-height: 32px;
+    font-size: 18px;
+    line-height: 24px;
     margin: 0 0 24px;
 }
 
 h4,
 h5,
 h6 {
-    font-size: 20px;
+    font-size: 16px;
     line-height: 24px;
     margin: 0 0 24px;
 }
@@ -143,10 +129,11 @@ li ol {
 }
 
 blockquote {
-    font-style: normal;
+    font-size: italic;
     font-size: 23px;
     line-height: 32px;
     margin: 0 0 24px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 blockquote * {
@@ -174,16 +161,15 @@ a {
     transition: all .1s ease-in-out;
 }
 
-a:visited,
+a:visited, /*LoVe befor Hate (visited en active voor hover en focus)*/
 a:active {
-    color: #3E3EA8;
+    color: blueviolet;
 }
 
 a:hover,
 a:focus {
-    color: #3E3EA8;
+    color: crimson;
 }
-
 /*------------------------------------*\
   #OBJECTS
 \*------------------------------------*/
@@ -195,7 +181,6 @@ a:focus {
 */
 
 .o-row {
-    position: relative;
     padding: 24px 24px 0;
     display: flow-root; /* New solution! Fixes margin collapsing */
 }
@@ -440,6 +425,61 @@ a:focus {
 /*------------------------------------*\
   #COMPONENTS
 \*------------------------------------*/
+
+/*
+    Component: loggin
+    ---
+*/
+.c-username,
+.c-pswd,
+.c-create-new-account{
+    display: block;
+    line-height: 20px;
+}
+.c-loggin{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    line-height: 50px;
+}
+.c-loggin-placeholder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+    Component: profile
+    ---
+*/
+
+.c-name,
+.c-voornaam,
+.c-email,
+.c-number{
+    display: block;
+    line-height: 20px;
+}
+.c-profile{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    line-height: 50px;
+}
+.c-profile-placeholder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/*
+    Component: mobile nav
+    ---
+    Dedicated mobile nav component
+*/
+
 .c-page{
     transform: translateX(0);
     transition: transform 1s ease
@@ -565,6 +605,12 @@ a:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* position: fixed; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 24px 24px 0px 24px;
+    width: 100%;
 }
 
 .c-header__nav {
@@ -700,19 +746,46 @@ a:focus {
 .c-nav__link,
 .c-nav__link:visited,
 .c-nav__link:active {
-    color: #202024;
+    color: rgb(0, 0, 172);;
 }
 
 .c-nav__link--meta,
 .c-nav__link--meta:visited,
 .c-nav__link--meta:active {
-    color: #6C6C75;
+    color: rgb(0, 0, 172);;
 }
 
 .is-selected .c-nav__link,
 .c-nav__link:hover,
 .c-nav__link:focus {
-    color: #5051db;
+    color: rgb(0, 0, 172);;
+}
+
+.c-nav__link {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+.c-nav__link {
+    text-decoration: none;
+    padding: 5px 0;
+    position: relative;
+    color: rgb(0, 0, 172);
+}
+
+.c-nav__link:after{
+    content: '';
+    background: rgb(0, 0, 172);
+    width: 0%;
+    height: 2px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: width 0.5s;
+}
+
+.c-nav__link:hover::after{
+    width: 100%;
 }
 
 @media (min-width: 992px) {
@@ -725,6 +798,35 @@ a:focus {
     .c-nav__link {
         padding: 8px 16px;
     }
+}
+
+.c-layout {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* justify-content: space-between; */
+}
+  
+.c-layout__item {
+    background-color: #fff;
+    /* border: .2rem solid #AAAAAA; */
+    /* padding: 6rem min(15rem,40%); */
+    width: min(500px,100%);
+    height: 300px;
+    text-align: center;
+    /* margin: 0p 0px 90px 0px; */
+    box-shadow: 1px 1px 3px 3px rgb(242, 244, 246);
+}
+
+.c-layout--gutter{
+    margin: 0 -16px;
+}
+
+.c-layout--gutter > .c-layout__item{
+    margin: 0 16px 32px;
 }
 
 /*
@@ -1233,9 +1335,19 @@ a:focus {
 @media (min-width: 576px) {}
 */
 
-/* Medium devices (tablets, 768px and up)
-@media (min-width: 768px) {}
-*/
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    html
+    {
+        /* padding: 48px 48px 0 48px; */
+    }
+
+    .c-nav__title
+    {
+        font-size: 58px;
+        line-height: 64px;
+    }
+}
 
 /* Large devices (landscape tablets, desktops, 992px and up)
 @media (min-width: 992px) {}
@@ -1310,4 +1422,108 @@ a:focus {
     h3 {
         page-break-after: avoid;
     }
+}
+
+
+
+
+
+svg{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    z-index: 1000;
+}
+svg circle{
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: rgb(250, 251, 252);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transform:  translate(5px,5px);
+}
+svg circle:nth-child(2)
+{
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+}
+.card .c-second-circle{
+    stroke-dashoffset: calc(440 - (440 * 90) / 100);
+    stroke: #003cff;
+}
+.container{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+
+.percent{
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: white;
+    z-index: 1000;
+}
+.percent .number{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+}
+.percent .number h2{
+    color: #777;
+    font-weight: 700;
+    font-size: 40px;
+    transition: 0.5s;
+}
+.percent .number h2 span{
+    font-size: 24px;
+    color: #777;
+    transition: 0.5s;
+}
+.text{
+    position: relative;
+    color: #777;
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    
+}
+
+
+
+footer{
+    background-color: rgb(0, 0, 172);
+    color: white;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 10vh;
+    margin: 0 -24px;
+}
+
+.c-footer-links li{
+    display: inline-block;
+    margin: 20px 50px;
+}
+
+main{
+    min-height: 80vh;
+}
+
+header{
+    min-height: 10vh;
 }
