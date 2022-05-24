@@ -7,11 +7,21 @@ let dailyGoal
 
 //**** listenTo ****
 const listenToUI = function(){
+    listenToClickReadTemp()
 
 }
 
+const listenToClickReadTemp = function(){
+    const buttons = document.querySelectorAll('.temp');
+    for(const b of buttons){
+      b.addEventListener('click', function(){
+          const temp = document.querySelector('.tempValue');
+          temp.innerHTML = "30°C";
+      })
+    }
+  }
 
-//**** socketio ****
+// **** socketio ****
 const listenToSocket = function(){
     socketio.on("connect", function(){
         console.log("Verbonden met socket webserver");
@@ -32,10 +42,10 @@ const loadDailyGoal = function(){
 //**** init ****
 const init = function(){
     console.log("Front-end loaded");
-    dailyGoal = document.querySelector(".js-daily-goal")
-    console.log(dailyGoal)
+    //dailyGoal = document.querySelector(".js-daily-goal")
+    //console.log(dailyGoal)
     listenToUI();
-    loadDailyGoal();
+    //loadDailyGoal();
     // listenToSocket();
 }
 
