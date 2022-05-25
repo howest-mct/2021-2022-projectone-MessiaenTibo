@@ -6,14 +6,14 @@ let dailyGoal
 
 
 const getTemperatuur = function(){
-    const url = "http://127.0.0.1:5000/api/v1/temperatuur/"
-    handleData(url, showDestination)
+    const url = "http://192.168.168.169:5000/api/v1/history/"
+    handleData(url, showTemperatuur)
   }
 
 
 const showTemperatuur = function(jsonObject){
     const temp = document.querySelector('.tempValue');
-    temp.innerHTML = "30°C";
+    temp.innerHTML = jsonObject.Waarde + "°C";
 }
 
 //**** listenTo ****
@@ -26,7 +26,8 @@ const listenToClickReadTemp = function(){
     const buttons = document.querySelectorAll('.temp');
     for(const b of buttons){
       b.addEventListener('click', function(){
-        //   showTemperatuur
+        console.log("klik")
+        getTemperatuur()
       })
     }
   }

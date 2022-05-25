@@ -19,7 +19,13 @@ class DataRepository:
 
     @staticmethod
     def create_temp(DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar):
-        sql = "INSERT INTO Historiek (DeviceId, GerbruikerId, ActieDatum, Waarde, Commentaar) VALUES (%s,%s,%s,%s,%s)"
+        sql = "INSERT INTO Historiek (DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar) VALUES (%s,%s,%s,%s,%s)"
         params = [DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar]
         result = Database.execute_sql(sql, params)
+        return result
+
+    @staticmethod
+    def read_historyId():
+        sql = "SELECT * FROM Historiek where DeviceId = 2 order by Volgnummer desc limit 1"
+        result = Database.get_one_row(sql)
         return result

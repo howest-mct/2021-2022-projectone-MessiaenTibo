@@ -42,19 +42,30 @@ def historiek():
         pass
 
 
+@app.route(endpoint + '/temperatuur/', methods=['GET','PUT'])
+def temperatuur():
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        pass
+
+@app.route(endpoint + "/history//", methods=['GET'])
+def historiekId():
+    if request.method == "GET":
+        data = DataRepository.read_historyId()
+        return jsonify(data), 200
+
 # Schakeling
 def Inlezen_temperatuur():
-    
     tekst = ''
-        
     sensor_file = open(sensor_file_name,'r')
     for line in sensor_file:
         if 't=' in line: 
             tekst = line[29] + line[30] + "." + line[31]+ line[32]+ line[33]
         print(tekst)
 
-    DataRepository.create_temp(2,1, datetime.now() , tekst, "Ingelezen temperatuur")
-    threading.Timer(10,Inlezen_temperatuur).start()
+    #DataRepository.create_temp(2,1, datetime.now() , tekst, "Ingelezen temperatuur")
+    threading.Timer(1,Inlezen_temperatuur).start()
   
         
 
