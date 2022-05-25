@@ -5,6 +5,17 @@ const lanIP = `${window.location.hostname}:5000`; // ip van de webserver
 let dailyGoal
 
 
+const getTemperatuur = function(){
+    const url = "http://127.0.0.1:5000/api/v1/temperatuur/"
+    handleData(url, showDestination)
+  }
+
+
+const showTemperatuur = function(jsonObject){
+    const temp = document.querySelector('.tempValue');
+    temp.innerHTML = "30°C";
+}
+
 //**** listenTo ****
 const listenToUI = function(){
     listenToClickReadTemp()
@@ -15,8 +26,7 @@ const listenToClickReadTemp = function(){
     const buttons = document.querySelectorAll('.temp');
     for(const b of buttons){
       b.addEventListener('click', function(){
-          const temp = document.querySelector('.tempValue');
-          temp.innerHTML = "30°C";
+        //   showTemperatuur
       })
     }
   }

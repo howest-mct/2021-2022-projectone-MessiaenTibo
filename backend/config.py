@@ -1,9 +1,9 @@
 [connector_python]
-user = root_fswd
+user = student
 host = 127.0.0.1
 port = 3306
-password = root_fswd
-database = water
+password = W8w00rd
+database = Projectone
 
 [application_config]
 driver = 'SQL Server'
