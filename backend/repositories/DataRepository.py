@@ -1,3 +1,4 @@
+from tkinter import W
 from .Database import Database
 
 
@@ -10,3 +11,28 @@ class DataRepository:
             gegevens = request.form.to_dict()
         return gegevens
 
+    @staticmethod
+    def read_Device():
+        sql = "SELECT * FROM Device"
+        result = Database.get_rows(sql)
+        return result
+
+    @staticmethod
+    def create_temp(DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar):
+        sql = "INSERT INTO Historiek (DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar) VALUES (%s,%s,%s,%s,%s)"
+        params = [DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar]
+        result = Database.execute_sql(sql, params)
+        return result
+
+    @staticmethod
+    def update_temp(Volgnummer, DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar):
+        sql = "update Historiek set DeviceId = %s, GebruikerId = %s, ActieDatum = %s, Waarde = %s, Commentaar = %s where Volgnummer = %s"
+        params = [DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar, Volgnummer]
+        result = Database.execute_sql(sql, params)
+        return result
+
+    @staticmethod
+    def read_historyId():
+        sql = "SELECT * FROM Historiek where DeviceId = 2 order by Volgnummer desc limit 1"
+        result = Database.get_one_row(sql)
+        return result
