@@ -25,6 +25,13 @@ class DataRepository:
         return result
 
     @staticmethod
+    def update_temp(Volgnummer, DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar):
+        sql = "update Historiek set DeviceId = %s, GebruikerId = %s, ActieDatum = %s, Waarde = %s, Commentaar = %s where Volgnummer = %s"
+        params = [DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar, Volgnummer]
+        result = Database.execute_sql(sql, params)
+        return result
+
+    @staticmethod
     def read_historyId():
         sql = "SELECT * FROM Historiek where DeviceId = 2 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)

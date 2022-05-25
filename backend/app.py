@@ -64,7 +64,7 @@ def Inlezen_temperatuur():
             tekst = line[29] + line[30] + "." + line[31]+ line[32]+ line[33]
         print(tekst)
 
-    #DataRepository.create_temp(2,1, datetime.now() , tekst, "Ingelezen temperatuur")
+    DataRepository.update_temp(88,2,1, datetime.now() , tekst, "Ingelezen temperatuur")
     threading.Timer(1,Inlezen_temperatuur).start()
   
         
