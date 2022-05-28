@@ -6,8 +6,11 @@ from repositories.DataRepository import DataRepository
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from datetime import datetime, date
+import time
 import threading
 from RPi import GPIO
+import adafruit_dht
+import board
 #endregion
 
 
@@ -36,7 +39,7 @@ MagnetContactThreeState = False
 MagnetContactFourState = False
 
 # Humidity sensor
-humiditySensor = 12
+dhtDevice = adafruit_dht.DHT11(board.D12, use_pulseio=False)
 
 # Buzzer
 Buzzer = 18
@@ -65,8 +68,9 @@ def setup():
     GPIO.add_event_detect(MagnetContactTwo, GPIO.RISING, FindUser, bouncetime=200)
     GPIO.add_event_detect(MagnetContactThree, GPIO.RISING, FindUser, bouncetime=200)
     GPIO.add_event_detect(MagnetContactFour, GPIO.RISING, FindUser, bouncetime=200)
+    # # print(DHTtemp)
+    # print("Temp={0:0.1f}C Humidity={1:0.1f}%".format(DHTtemp, DHThumidity))
     FindUser()
-    Write_temperature()
 
 
 #region **** ROUTES ****
@@ -120,15 +124,29 @@ def read_temperature():
     print(temperature)
     return temperature
 
-def Write_temperature():
+def Write_WaterTemperature():
     temperature = read_temperature()
     DataRepository.update_temp(88,2,1, datetime.now() , str(temperature), "Ingelezen temperatuur")
-    threading.Timer(1,Write_temperature).start()
 
 
 
 # Humidity Sensor
-  
+def Read_Humidity():
+    try:
+        # Print the values to the serial port
+        temperature_c = dhtDevice.temperature
+        temperature_f = temperature_c * (9 / 5) + 32
+        humidity = dhtDevice.humidity
+        print(
+            "Temp: {:.1f} F / {:.1f} C    Humidity: {}% ".format(
+                temperature_f, temperature_c, humidity
+            )
+        )
+    except RuntimeError as error:
+        # Errors happen fairly often, DHT's are hard to read, just keep going
+        print(error.args[0])
+        time.sleep(2.0)
+        #dhtDevice.exit()
 
 
 # Water Flow Sensor
@@ -151,6 +169,7 @@ def FindUser(x=0):
         elif(MagnetContactFourState):
             SelectedMagnetContact = 4
         print("User {} is selected".format(SelectedMagnetContact))
+        Read_data()
     else:
         if(MagnetContactOneState | MagnetContactTwoState | MagnetContactThreeState | MagnetContactFourState):
             print("There is only 1 user at the same time allowd!")
@@ -161,6 +180,14 @@ def FindUser(x=0):
     # print(MagnetContactTwoState)
     # print(MagnetContactThreeState)
     # print(MagnetContactFourState)
+
+
+# Requesting data
+def Read_data():
+    read_temperature()
+    Read_Humidity()
+    threading.Timer(10,Read_data).start()
+
 
 #endregion
 
