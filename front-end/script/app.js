@@ -5,32 +5,61 @@ const lanIP = `${window.location.hostname}:5000`; // ip van de webserver
 let dailyGoal
 
 
-const getTemperatuur = function(){
-    const url = "http://192.168.168.169:5000/api/v1/history/"
-    handleData(url, showTemperatuur)
+
+//**** get_ ****
+const get_Temperature = function(){
+    const url = "http://192.168.168.169:5000/api/v1/history/WaterTemp/"
+    handleData(url, show_Temperature)
   }
 
+const get_humidity = function(){
+  const url = "http://192.168.168.169:5000/api/v1/history/Humidity/"
+  handleData(url, show_humidity)
+}
 
-const showTemperatuur = function(jsonObject){
+
+
+//**** show_ ****
+const show_Temperature = function(jsonObject){
     const temp = document.querySelector('.tempValue');
     temp.innerHTML = jsonObject.Waarde + "°C";
 }
 
+const show_humidity = function(jsonObject){
+  const humidity = document.querySelector('.humidityValue');
+  humidity.innerHTML = jsonObject.Waarde + "%";
+}
+
+
+
 //**** listenTo ****
 const listenToUI = function(){
     listenToClickReadTemp()
-
+    listenToClickReadHumidity()
 }
 
 const listenToClickReadTemp = function(){
     const buttons = document.querySelectorAll('.temp');
     for(const b of buttons){
       b.addEventListener('click', function(){
-        console.log("klik")
-        getTemperatuur()
+        console.log("klik temp")
+        get_Temperature()
       })
     }
   }
+
+
+const listenToClickReadHumidity = function(){
+    const buttons = document.querySelectorAll('.humidity');
+    for(const b of buttons){
+      b.addEventListener('click', function(){
+        console.log("klik humidity")
+        get_humidity()
+      })
+    }
+  }
+
+
 
 // **** socketio ****
 const listenToSocket = function(){
@@ -40,7 +69,7 @@ const listenToSocket = function(){
 };
 
 
-
+// **** methods ****
 const loadDailyGoal = function(){
     let percent = dailyGoal.getAttribute("percent");
     console.log(percent);
