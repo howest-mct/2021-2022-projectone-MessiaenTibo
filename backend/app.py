@@ -38,6 +38,8 @@ MagnetContactTwoState = False
 MagnetContactThreeState = False
 MagnetContactFourState = False
 
+SelectedMagnetContact = 0
+
 # Humidity sensor
 dhtDevice = adafruit_dht.DHT11(board.D12, use_pulseio=False)
 
@@ -68,8 +70,6 @@ def setup():
     GPIO.add_event_detect(MagnetContactTwo, GPIO.RISING, FindUser, bouncetime=200)
     GPIO.add_event_detect(MagnetContactThree, GPIO.RISING, FindUser, bouncetime=200)
     GPIO.add_event_detect(MagnetContactFour, GPIO.RISING, FindUser, bouncetime=200)
-    # # print(DHTtemp)
-    # print("Temp={0:0.1f}C Humidity={1:0.1f}%".format(DHTtemp, DHThumidity))
     FindUser()
 
 
@@ -88,7 +88,7 @@ def devices():
 @app.route(endpoint + '/historiek/', methods=['GET','POST'])
 def historiek():
     if request.method == 'GET':
-        data = DataRepository.read_Historiek()
+        data = DataRepository.read_History()
         return jsonify(data), 200
     elif request.method == 'POST':
         pass
@@ -101,10 +101,16 @@ def temperatuur():
     elif request.method == 'POST':
         pass
 
-@app.route(endpoint + "/history//", methods=['GET'])
-def historiekId():
+@app.route(endpoint + "/history/WaterTemp/", methods=['GET'])
+def historykWaterTemp():
     if request.method == "GET":
-        data = DataRepository.read_historyId()
+        data = DataRepository.read_HistoryWaterTemp()
+        return jsonify(data), 200
+
+@app.route(endpoint + "/history/Humidity/", methods=['GET'])
+def historyHumidity():
+    if request.method == "GET":
+        data = DataRepository.read_HistoryHumidity()
         return jsonify(data), 200
 
 #endregion
@@ -125,8 +131,13 @@ def read_temperature():
     return temperature
 
 def Write_WaterTemperature():
+    global SelectedMagnetContact
     temperature = read_temperature()
-    DataRepository.update_temp(88,2,1, datetime.now() , str(temperature), "Ingelezen temperatuur")
+    #device id = 2 for watertemp
+    print("selectedMagnetcontact")
+    print(SelectedMagnetContact)
+    #DataRepository.create_History(2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
+    DataRepository.update_History(146,2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
 
 
 
@@ -134,27 +145,35 @@ def Write_WaterTemperature():
 def Read_Humidity():
     try:
         # Print the values to the serial port
-        temperature_c = dhtDevice.temperature
-        temperature_f = temperature_c * (9 / 5) + 32
+        # temperature_c = dhtDevice.temperature
+        # temperature_f = temperature_c * (9 / 5) + 32
         humidity = dhtDevice.humidity
-        print(
-            "Temp: {:.1f} F / {:.1f} C    Humidity: {}% ".format(
-                temperature_f, temperature_c, humidity
-            )
-        )
+        # print(
+        #     "Temp: {:.1f} F / {:.1f} C    Humidity: {}% ".format(
+        #         temperature_f, temperature_c, humidity
+        #     )
+        # )
     except RuntimeError as error:
         # Errors happen fairly often, DHT's are hard to read, just keep going
         print(error.args[0])
         time.sleep(2.0)
         #dhtDevice.exit()
+    return humidity
 
+
+def Write_Humidity():
+    global SelectedMagnetContact
+    humidity = Read_Humidity()
+    #device id = 3 for humidity
+    #DataRepository.create_History(3,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
 
 # Water Flow Sensor
 
 
 # Find User
 def FindUser(x=0):
-    SelectedMagnetContact = 0
+    global SelectedMagnetContact
     MagnetContactOneState = GPIO.input(MagnetContactOne)
     MagnetContactTwoState = GPIO.input(MagnetContactTwo)
     MagnetContactThreeState = GPIO.input(MagnetContactThree)
@@ -175,7 +194,6 @@ def FindUser(x=0):
             print("There is only 1 user at the same time allowd!")
         else:
             print("There must be at least 1 selected user!")
-        threading.Timer(1,FindUser).start()
     # print(MagnetContactOneState)
     # print(MagnetContactTwoState)
     # print(MagnetContactThreeState)
@@ -184,8 +202,8 @@ def FindUser(x=0):
 
 # Requesting data
 def Read_data():
-    read_temperature()
-    Read_Humidity()
+    Write_WaterTemperature()
+    Write_Humidity()
     threading.Timer(10,Read_data).start()
 
 

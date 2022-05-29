@@ -8,12 +8,12 @@ let dailyGoal
 
 //**** get_ ****
 const get_Temperature = function(){
-    const url = "http://192.168.168.169:5000/api/v1/history/"
+    const url = "http://192.168.168.169:5000/api/v1/history/WaterTemp/"
     handleData(url, show_Temperature)
   }
 
 const get_humidity = function(){
-  const url = "http://192.168.168.169:5000/api/v1/history/humidity/"
+  const url = "http://192.168.168.169:5000/api/v1/history/Humidity/"
   handleData(url, show_humidity)
 }
 
