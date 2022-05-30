@@ -66,10 +66,10 @@ def setup():
     GPIO.setup(MagnetContactTwo, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactThree, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactFour, GPIO.IN, GPIO.PUD_DOWN)
-    GPIO.add_event_detect(MagnetContactOne, GPIO.RISING, FindUser, bouncetime=200)
-    GPIO.add_event_detect(MagnetContactTwo, GPIO.RISING, FindUser, bouncetime=200)
-    GPIO.add_event_detect(MagnetContactThree, GPIO.RISING, FindUser, bouncetime=200)
-    GPIO.add_event_detect(MagnetContactFour, GPIO.RISING, FindUser, bouncetime=200)
+    GPIO.add_event_detect(MagnetContactOne, GPIO.BOTH, FindUser, bouncetime=200)
+    GPIO.add_event_detect(MagnetContactTwo, GPIO.BOTH, FindUser, bouncetime=200)
+    GPIO.add_event_detect(MagnetContactThree, GPIO.BOTH, FindUser, bouncetime=200)
+    GPIO.add_event_detect(MagnetContactFour, GPIO.BOTH, FindUser, bouncetime=200)
     FindUser()
 
 
@@ -143,6 +143,7 @@ def Write_WaterTemperature():
 
 # Humidity Sensor
 def Read_Humidity():
+    humidity = 0
     try:
         # Print the values to the serial port
         # temperature_c = dhtDevice.temperature
@@ -174,6 +175,7 @@ def Write_Humidity():
 # Find User
 def FindUser(x=0):
     global SelectedMagnetContact
+    SelectedMagnetContact = 0
     MagnetContactOneState = GPIO.input(MagnetContactOne)
     MagnetContactTwoState = GPIO.input(MagnetContactTwo)
     MagnetContactThreeState = GPIO.input(MagnetContactThree)
