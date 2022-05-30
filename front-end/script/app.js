@@ -17,6 +17,11 @@ const get_humidity = function(){
   handleData(url, show_humidity)
 }
 
+const get_WaterFlow = function(){
+  const url = "http://192.168.168.169:5000/api/v1/history/waterflow/"
+  handleData(url, show_WaterFlow)
+}
+
 
 
 //**** show_ ****
@@ -30,12 +35,18 @@ const show_humidity = function(jsonObject){
   humidity.innerHTML = jsonObject.Waarde + "%";
 }
 
+const show_WaterFlow = function(jsonObject){
+  const humidity = document.querySelector('.waterflowValue');
+  humidity.innerHTML = jsonObject.Waarde + " ml/sec";
+}
+
 
 
 //**** listenTo ****
 const listenToUI = function(){
     listenToClickReadTemp()
     listenToClickReadHumidity()
+    listenToClickReadWaterFlow()
 }
 
 const listenToClickReadTemp = function(){
@@ -59,6 +70,16 @@ const listenToClickReadHumidity = function(){
     }
   }
 
+
+  const listenToClickReadWaterFlow = function(){
+    const buttons = document.querySelectorAll('.waterflow');
+    for(const b of buttons){
+      b.addEventListener('click', function(){
+        console.log("klik waterflow")
+        get_WaterFlow()
+      })
+    }
+  }
 
 
 // **** socketio ****
