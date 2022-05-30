@@ -54,6 +54,8 @@ LedCircle = 26
 
 # Water Flow Sensor
 WaterFlowSensor = 21
+start_counter = 0
+WaterFlowPulsen = 0
 
 #endregion
 
@@ -66,10 +68,12 @@ def setup():
     GPIO.setup(MagnetContactTwo, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactThree, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactFour, GPIO.IN, GPIO.PUD_DOWN)
-    GPIO.add_event_detect(MagnetContactOne, GPIO.RISING, FindUser, bouncetime=200)
-    GPIO.add_event_detect(MagnetContactTwo, GPIO.RISING, FindUser, bouncetime=200)
-    GPIO.add_event_detect(MagnetContactThree, GPIO.RISING, FindUser, bouncetime=200)
-    GPIO.add_event_detect(MagnetContactFour, GPIO.RISING, FindUser, bouncetime=200)
+    GPIO.setup(WaterFlowSensor, GPIO.IN, GPIO.PUD_DOWN)
+    GPIO.add_event_detect(MagnetContactOne, GPIO.BOTH, FindUser, bouncetime=200)
+    GPIO.add_event_detect(MagnetContactTwo, GPIO.BOTH, FindUser, bouncetime=200)
+    GPIO.add_event_detect(MagnetContactThree, GPIO.BOTH, FindUser, bouncetime=200)
+    GPIO.add_event_detect(MagnetContactFour, GPIO.BOTH, FindUser, bouncetime=200)
+    GPIO.add_event_detect(WaterFlowSensor, GPIO.FALLING, callback=countPulse)
     FindUser()
 
 
@@ -113,6 +117,11 @@ def historyHumidity():
         data = DataRepository.read_HistoryHumidity()
         return jsonify(data), 200
 
+@app.route(endpoint + "/history/waterflow/", methods=['GET'])
+def historyWaterflow():
+    if request.method == "GET":
+        data = DataRepository.read_HistoryWaterflow()
+        return jsonify(data), 200
 #endregion
 
 
@@ -137,12 +146,14 @@ def Write_WaterTemperature():
     print("selectedMagnetcontact")
     print(SelectedMagnetContact)
     #DataRepository.create_History(2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
-    DataRepository.update_History(146,2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
+    if(SelectedMagnetContact!=0):
+        DataRepository.update_History(146,2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
 
 
 
 # Humidity Sensor
 def Read_Humidity():
+    humidity = 0
     try:
         # Print the values to the serial port
         # temperature_c = dhtDevice.temperature
@@ -166,14 +177,41 @@ def Write_Humidity():
     humidity = Read_Humidity()
     #device id = 3 for humidity
     #DataRepository.create_History(3,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
-    DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    if(SelectedMagnetContact!=0):
+        DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+
+
 
 # Water Flow Sensor
+def Write_Waterflow():
+    global SelectedMagnetContact
+    waterflow = Read_Waterflow()
+    if(SelectedMagnetContact!=0):
+        DataRepository.create_History(1,SelectedMagnetContact, datetime.now(), str(waterflow), "Ingelezen waterflow")
+
+def Read_Waterflow():
+    global start_counter
+    global WaterFlowPulsen
+    start_counter = 1
+    time.sleep(1)
+    start_counter = 0
+    flow = (WaterFlowPulsen / 7.5*1000/60) # Pulse frequency (Hz) = 7.5Q, Q is flow rate in L/min.
+    print("The flow is: %.3f ml/sec" % (flow))
+    #publish.single("/Garden.Pi/WaterFlow", flow, hostname=MQTT_SERVER)
+    WaterFlowPulsen = 0
+    #time.sleep(1)
+    return flow
+
+def countPulse(pin):
+   global WaterFlowPulsen
+   if start_counter == 1:
+      WaterFlowPulsen = WaterFlowPulsen+1
 
 
 # Find User
 def FindUser(x=0):
     global SelectedMagnetContact
+    SelectedMagnetContact = 0
     MagnetContactOneState = GPIO.input(MagnetContactOne)
     MagnetContactTwoState = GPIO.input(MagnetContactTwo)
     MagnetContactThreeState = GPIO.input(MagnetContactThree)
@@ -202,9 +240,12 @@ def FindUser(x=0):
 
 # Requesting data
 def Read_data():
-    Write_WaterTemperature()
-    Write_Humidity()
-    threading.Timer(10,Read_data).start()
+    global SelectedMagnetContact
+    if(SelectedMagnetContact!=0):
+        Write_WaterTemperature()
+        Write_Humidity()
+        Write_Waterflow()
+        threading.Timer(1,Read_data).start()
 
 
 #endregion

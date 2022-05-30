@@ -42,3 +42,9 @@ class DataRepository:
         sql = "SELECT * FROM Historiek where DeviceId = 3 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)
         return result
+
+    @staticmethod
+    def read_HistoryWaterflow():
+        sql = "SELECT * FROM Historiek where DeviceId = 1 order by Volgnummer desc limit 1"
+        result = Database.get_one_row(sql)
+        return result 
