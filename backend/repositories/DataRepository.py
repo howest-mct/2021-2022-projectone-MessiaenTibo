@@ -1,4 +1,3 @@
-from tkinter import W
 from .Database import Database
 
 
@@ -25,6 +24,13 @@ class DataRepository:
         return result
 
     @staticmethod
+    def create_HistoryHumidity(DeviceId, ActieDatum, Waarde, Commentaar):
+        sql = "INSERT INTO HistoriekHumidity (DeviceId, ActieDatum, Waarde, Commentaar) VALUES (%s,%s,%s,%s)"
+        params = [DeviceId, ActieDatum, Waarde, Commentaar]
+        result = Database.execute_sql(sql, params)
+        return result
+
+    @staticmethod
     def update_History(Volgnummer, DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar):
         sql = "update Historiek set DeviceId = %s, GebruikerId = %s, ActieDatum = %s, Waarde = %s, Commentaar = %s where Volgnummer = %s"
         params = [DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar, Volgnummer]
@@ -39,6 +45,6 @@ class DataRepository:
 
     @staticmethod
     def read_HistoryHumidity():
-        sql = "SELECT * FROM Historiek where DeviceId = 3 order by Volgnummer desc limit 1"
+        sql = "SELECT * FROM HistoriekHumidity where DeviceId = 3 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)
         return result

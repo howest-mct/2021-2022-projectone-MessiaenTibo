@@ -166,7 +166,7 @@ def Write_Humidity():
     humidity = Read_Humidity()
     #device id = 3 for humidity
     #DataRepository.create_History(3,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
-    DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    DataRepository.create_HistoryHumidity(3 , datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
 
 # Water Flow Sensor
 
