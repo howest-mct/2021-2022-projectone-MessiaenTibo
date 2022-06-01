@@ -75,6 +75,7 @@ def setup():
     GPIO.add_event_detect(MagnetContactFour, GPIO.BOTH, FindUser, bouncetime=200)
     GPIO.add_event_detect(WaterFlowSensor, GPIO.FALLING, callback=countPulse)
     FindUser()
+    Write_Humidity()
 
 
 #region **** ROUTES ****
@@ -174,9 +175,10 @@ def Write_Humidity():
     global SelectedMagnetContact
     humidity = Read_Humidity()
     #device id = 3 for humidity
-    if(SelectedMagnetContact!=0):
-        #DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
-        DataRepository.create_HistoryHumidity(3, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    #DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    DataRepository.create_HistoryHumidity(3, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    print(str(humidity) + "%")
+    threading.Timer(30,Write_Humidity).start()
 
 
 
@@ -230,10 +232,6 @@ def FindUser(x=0):
             print("There is only 1 user at the same time allowd!")
         else:
             print("There must be at least 1 selected user!")
-    # print(MagnetContactOneState)
-    # print(MagnetContactTwoState)
-    # print(MagnetContactThreeState)
-    # print(MagnetContactFourState)
 
 
 # Requesting data
@@ -241,7 +239,6 @@ def Read_data():
     global SelectedMagnetContact
     if(SelectedMagnetContact!=0):
         Write_WaterTemperature()
-        Write_Humidity()
         Write_Waterflow()
         threading.Timer(1,Read_data).start()
 
