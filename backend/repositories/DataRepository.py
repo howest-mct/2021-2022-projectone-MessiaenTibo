@@ -25,6 +25,13 @@ class DataRepository:
         return result
 
     @staticmethod
+    def create_HistoryHumidity(DeviceId, ActieDatum, Waarde, Commentaar):
+        sql = "INSERT INTO HistoriekHumidity (DeviceId, ActieDatum, Waarde, Commentaar) VALUES (%s,%s,%s,%s)"
+        params = [DeviceId, ActieDatum, Waarde, Commentaar]
+        result = Database.execute_sql(sql, params)
+        return result
+
+    @staticmethod
     def update_History(Volgnummer, DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar):
         sql = "update Historiek set DeviceId = %s, GebruikerId = %s, ActieDatum = %s, Waarde = %s, Commentaar = %s where Volgnummer = %s"
         params = [DeviceId, GebruikerId, ActieDatum, Waarde, Commentaar, Volgnummer]
