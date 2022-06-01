@@ -140,14 +140,12 @@ def read_temperature():
     return temperature
 
 def Write_WaterTemperature():
-    global SelectedMagnetContact
+    global SelectedMagnetContact 
     temperature = read_temperature()
     #device id = 2 for watertemp
-    print("selectedMagnetcontact")
-    print(SelectedMagnetContact)
-    #DataRepository.create_History(2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
     if(SelectedMagnetContact!=0):
-        DataRepository.update_History(146,2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
+        #DataRepository.update_History(146,2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
+        DataRepository.create_History(2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
 
 
 
@@ -176,9 +174,9 @@ def Write_Humidity():
     global SelectedMagnetContact
     humidity = Read_Humidity()
     #device id = 3 for humidity
-    #DataRepository.create_History(3,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
     if(SelectedMagnetContact!=0):
-        DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+        #DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+        DataRepository.create_HistoryHumidity(3, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
 
 
 
@@ -187,7 +185,7 @@ def Write_Waterflow():
     global SelectedMagnetContact
     waterflow = Read_Waterflow()
     if(SelectedMagnetContact!=0):
-        DataRepository.create_History(1,SelectedMagnetContact, datetime.now(), str(waterflow), "Ingelezen waterflow")
+        DataRepository.create_History(1, SelectedMagnetContact, datetime.now(), str(waterflow), "Ingelezen waterflow")
 
 def Read_Waterflow():
     global start_counter
