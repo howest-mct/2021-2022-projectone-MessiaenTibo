@@ -11,6 +11,9 @@ import threading
 from RPi import GPIO
 import adafruit_dht
 import board
+from subprocess import check_output
+from LCD import lcd
+lcd = lcd()
 #endregion
 
 
@@ -74,6 +77,16 @@ def setup():
     GPIO.add_event_detect(MagnetContactThree, GPIO.BOTH, FindUser, bouncetime=200)
     GPIO.add_event_detect(MagnetContactFour, GPIO.BOTH, FindUser, bouncetime=200)
     GPIO.add_event_detect(WaterFlowSensor, GPIO.FALLING, callback=countPulse)
+    lcd.lcdInit()
+    lcd.clear_screen()
+    ips = check_output(['hostname', '--all-ip-addresses']).split()
+    lcd.write_message(ips[0].decode())
+    print(ips[0].decode())
+    # Code voor eventuele tweede IP adress weer te geven
+    # if len(ips) > 1:
+    #     lcd.set_cursor(0, 1)
+    #     lcd.write_message(ips[1].decode())
+    #     print(ips[1].decode())
     FindUser()
     Write_Humidity()
 
