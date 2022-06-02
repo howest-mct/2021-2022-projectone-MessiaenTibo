@@ -13,7 +13,10 @@ import adafruit_dht
 import board
 from subprocess import check_output
 from LCD import lcd
+import neopixel
+pixels = neopixel.NeoPixel(board.D26, 30)
 lcd = lcd()
+
 #endregion
 
 
