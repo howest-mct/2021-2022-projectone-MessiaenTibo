@@ -1,5 +1,6 @@
 #region **** IMPORTS ****
 import json
+from turtle import color
 from flask_socketio import SocketIO, emit, send
 from pkg_resources import require
 from repositories.DataRepository import DataRepository
@@ -14,7 +15,6 @@ import board
 from subprocess import check_output
 from LCD import lcd
 import neopixel
-pixels = neopixel.NeoPixel(board.D26, 30)
 lcd = lcd()
 
 #endregion
@@ -34,7 +34,7 @@ endpoint = '/api/v1'
 sensor_file_name = '/sys/bus/w1/devices/28-22cf61000900/w1_slave'
 
 # MagnetContacts
-MagnetContactOne = 18
+MagnetContactOne = 17 #was 18 is nu aangepast voor neopixelring
 MagnetContactTwo = 23
 MagnetContactThree = 24
 MagnetContactFour = 25
@@ -50,7 +50,7 @@ SelectedMagnetContact = 0
 dhtDevice = adafruit_dht.DHT11(board.D12, use_pulseio=False)
 
 # Buzzer
-Buzzer = 18
+Buzzer = 180
 
 # Button
 button = 5
@@ -80,6 +80,14 @@ def setup():
     GPIO.add_event_detect(MagnetContactThree, GPIO.BOTH, FindUser, bouncetime=200)
     GPIO.add_event_detect(MagnetContactFour, GPIO.BOTH, FindUser, bouncetime=200)
     GPIO.add_event_detect(WaterFlowSensor, GPIO.FALLING, callback=countPulse)
+    #test neopixel
+    pixels = neopixel.NeoPixel(board.D18, 24)
+    pixels.fill(0)
+    pixels[0] = (255, 0, 0)
+    for i in range(23):
+         #pixels[i] = (0, 0, 0)
+         pixels[i+1] = (255, 0, 0)
+         time.sleep(0.04)
     lcd.lcdInit()
     lcd.clear_screen()
     ips = check_output(['hostname', '--all-ip-addresses']).split()
