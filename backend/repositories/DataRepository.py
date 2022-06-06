@@ -46,7 +46,7 @@ class DataRepository:
 
     @staticmethod
     def read_HistoryHumidity():
-        sql = "SELECT * FROM Historiek where DeviceId = 3 order by Volgnummer desc limit 1"
+        sql = "SELECT * FROM HistoriekHumidity where DeviceId = 3 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)
         return result
 
