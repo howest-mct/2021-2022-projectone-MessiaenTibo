@@ -7,26 +7,31 @@ let dailyGoal
 
 
 //**** get_ ****
-const get_Temperature = function(){
-    const url = "http://192.168.168.169:5000/api/v1/history/WaterTemp/"
-    handleData(url, show_Temperature)
+const get_RoomTemperature = function(){
+    const url = "http://192.168.168.169:5000/api/v1/history/RoomTemp/"
+    handleData(url, show_RoomTemperature)
   }
 
-const get_humidity = function(){
+const get_Humidity = function(){
   const url = "http://192.168.168.169:5000/api/v1/history/Humidity/"
   handleData(url, show_humidity)
 }
 
 const get_WaterFlow = function(){
-  const url = "http://192.168.168.169:5000/api/v1/history/waterflow/"
+  const url = "http://192.168.168.169:5000/api/v1/history/Waterflow/"
   handleData(url, show_WaterFlow)
+}
+
+const get_WaterTemperature = function(){
+  const url = "http://192.168.168.169:5000/api/v1/history/WaterTemp/"
+  handleData(url, show_WaterTemperature)
 }
 
 
 
 //**** show_ ****
-const show_Temperature = function(jsonObject){
-    const temp = document.querySelector('.tempValue');
+const show_WaterTemperature = function(jsonObject){
+    const temp = document.querySelector('.watertempValue');
     temp.innerHTML = jsonObject.Waarde + "°C";
 }
 
@@ -40,21 +45,27 @@ const show_WaterFlow = function(jsonObject){
   humidity.innerHTML = jsonObject.Waarde + " ml/sec";
 }
 
+const show_RoomTemperature = function(jsonObject){
+  const humidity = document.querySelector('.roomtempValue');
+  humidity.innerHTML = jsonObject.Waarde + " °C";
+}
+
 
 
 //**** listenTo ****
 const listenToUI = function(){
-    listenToClickReadTemp()
+    listenToClickReadRoomTemp()
     listenToClickReadHumidity()
     listenToClickReadWaterFlow()
+    listenToClickReadWaterTemp()
 }
 
-const listenToClickReadTemp = function(){
-    const buttons = document.querySelectorAll('.temp');
+const listenToClickReadRoomTemp = function(){
+    const buttons = document.querySelectorAll('.roomtemp');
     for(const b of buttons){
       b.addEventListener('click', function(){
         console.log("klik temp")
-        get_Temperature()
+        get_RoomTemperature()
       })
     }
   }
@@ -65,7 +76,7 @@ const listenToClickReadHumidity = function(){
     for(const b of buttons){
       b.addEventListener('click', function(){
         console.log("klik humidity")
-        get_humidity()
+        get_Humidity()
       })
     }
   }
@@ -77,6 +88,16 @@ const listenToClickReadHumidity = function(){
       b.addEventListener('click', function(){
         console.log("klik waterflow")
         get_WaterFlow()
+      })
+    }
+  }
+
+  const listenToClickReadWaterTemp = function(){
+    const buttons = document.querySelectorAll('.watertemp');
+    for(const b of buttons){
+      b.addEventListener('click', function(){
+        console.log("klik temp")
+        get_WaterTemperature()
       })
     }
   }
