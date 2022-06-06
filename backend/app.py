@@ -99,7 +99,7 @@ def setup():
     #     lcd.write_message(ips[1].decode())
     #     print(ips[1].decode())
     FindUser()
-    Write_Humidity()
+    Write_HumidityAndTemperature()
 
 
 #region **** ROUTES ****
@@ -142,10 +142,16 @@ def historyHumidity():
         data = DataRepository.read_HistoryHumidity()
         return jsonify(data), 200
 
-@app.route(endpoint + "/history/waterflow/", methods=['GET'])
+@app.route(endpoint + "/history/Waterflow/", methods=['GET'])
 def historyWaterflow():
     if request.method == "GET":
         data = DataRepository.read_HistoryWaterflow()
+        return jsonify(data), 200
+
+@app.route(endpoint + "/history/RoomTemp/", methods=['GET'])
+def historyRoomTemp():
+    if request.method == "GET":
+        data = DataRepository.read_HistoryRoomTemp()
         return jsonify(data), 200
 #endregion
 
@@ -170,7 +176,7 @@ def Write_WaterTemperature():
     #device id = 2 for watertemp
     if(SelectedMagnetContact!=0):
         #DataRepository.update_History(146,2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
-        DataRepository.create_History(2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen temperatuur")
+        DataRepository.create_History(2,SelectedMagnetContact, datetime.now() , str(temperature), "Ingelezen water temperatuur")
 
 
 
@@ -194,15 +200,28 @@ def Read_Humidity():
         #dhtDevice.exit()
     return humidity
 
+def Read_RoomTemperature():
+    try:
+        temperature_c = dhtDevice.temperature
+    except RuntimeError as error:
+        # Errors happen fairly often, DHT's are hard to read, just keep going
+        print(error.args[0])
+        time.sleep(2.0)
+        #dhtDevice.exit()
+    return temperature_c
 
-def Write_Humidity():
+
+def Write_HumidityAndTemperature():
     global SelectedMagnetContact
     humidity = Read_Humidity()
+    temperature = Read_RoomTemperature()
     #device id = 3 for humidity
     #DataRepository.update_History(147, 3 ,SelectedMagnetContact, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
-    DataRepository.create_HistoryHumidity(3, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    DataRepository.create_HistoryBadkamer(3, datetime.now() , str(humidity), "Ingelezen luchtvochtigheid")
+    DataRepository.create_HistoryBadkamer(4, datetime.now() , str(temperature), "Ingelezen kamer temperatuur")
     print(str(humidity) + "%")
-    threading.Timer(30,Write_Humidity).start()
+    print(str(temperature) + "°C")
+    threading.Timer(30,Write_HumidityAndTemperature).start()
 
 
 

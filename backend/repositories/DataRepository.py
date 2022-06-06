@@ -25,8 +25,8 @@ class DataRepository:
         return result
 
     @staticmethod
-    def create_HistoryHumidity(DeviceId, ActieDatum, Waarde, Commentaar):
-        sql = "INSERT INTO HistoriekHumidity (DeviceId, ActieDatum, Waarde, Commentaar) VALUES (%s,%s,%s,%s)"
+    def create_HistoryBadkamer(DeviceId, ActieDatum, Waarde, Commentaar):
+        sql = "INSERT INTO HistoriekBadkamer (DeviceId, ActieDatum, Waarde, Commentaar) VALUES (%s,%s,%s,%s)"
         params = [DeviceId, ActieDatum, Waarde, Commentaar]
         result = Database.execute_sql(sql, params)
         return result
@@ -46,7 +46,7 @@ class DataRepository:
 
     @staticmethod
     def read_HistoryHumidity():
-        sql = "SELECT * FROM HistoriekHumidity where DeviceId = 3 order by Volgnummer desc limit 1"
+        sql = "SELECT * FROM HistoriekBadkamer where DeviceId = 3 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)
         return result
 
@@ -54,4 +54,10 @@ class DataRepository:
     def read_HistoryWaterflow():
         sql = "SELECT * FROM Historiek where DeviceId = 1 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)
-        return result 
+        return result
+
+    @staticmethod
+    def read_HistoryRoomTemp():
+        sql = "SELECT * FROM HistoriekBadkamer where DeviceId = 4 order by Volgnummer desc limit 1"
+        result = Database.get_one_row(sql)
+        return result
