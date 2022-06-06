@@ -201,6 +201,7 @@ def Read_Humidity():
     return humidity
 
 def Read_RoomTemperature():
+    temperature_c = 0
     try:
         temperature_c = dhtDevice.temperature
     except RuntimeError as error:
