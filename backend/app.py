@@ -83,10 +83,10 @@ def setup():
     #test neopixel
     pixels = neopixel.NeoPixel(board.D18, 24)
     pixels.fill(0)
-    pixels[0] = (255, 0, 0)
+    pixels[0] = (28, 28, 28)
     for i in range(23):
          #pixels[i] = (0, 0, 0)
-         pixels[i+1] = (255, 0, 0)
+         pixels[i+1] = (28, 28, 28)
          time.sleep(0.04)
     lcd.lcdInit()
     lcd.clear_screen()
@@ -94,10 +94,10 @@ def setup():
     lcd.write_message(ips[0].decode())
     print(ips[0].decode())
     # Code voor eventuele tweede IP adress weer te geven
-    # if len(ips) > 1:
-    #     lcd.set_cursor(0, 1)
-    #     lcd.write_message(ips[1].decode())
-    #     print(ips[1].decode())
+    if len(ips) > 1:
+        lcd.clear_screen()
+        lcd.write_message(ips[1].decode())
+        print(ips[1].decode())
     FindUser()
     Write_HumidityAndTemperature()
 
