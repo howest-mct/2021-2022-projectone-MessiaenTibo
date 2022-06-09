@@ -27,7 +27,9 @@ const get_WaterTemperature = function(){
   handleData(url, show_WaterTemperature)
 }
 
-
+const getData = function () {
+  handleData(`https://www.diero.be/MCT/JSON/iphone.json`, showData);
+};
 
 //**** show_ ****
 const show_WaterTemperature = function(jsonObject){
@@ -50,7 +52,16 @@ const show_RoomTemperature = function(jsonObject){
   humidity.innerHTML = jsonObject.Waarde + " °C";
 }
 
-
+const showData = function (jsonObject) {
+  console.log(jsonObject);
+  let converted_labels = [];
+  let converted_data = [];
+  for (let iphone of jsonObject) {
+    converted_labels.push(iphone.unit);
+    converted_data.push(iphone.price);
+  }
+  drawChart(converted_labels, converted_data);
+};
 
 //**** listenTo ****
 const listenToUI = function(){
@@ -129,6 +140,32 @@ const toggleNav = function() {
   }
 }
 
+const drawChart=function(labels,data){
+  var options = {
+    chart: {
+      id: 'myChart',
+      type: 'line',
+    },
+    stroke: {
+      curve: 'stepline',
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    series: [
+      {
+        name: labels,
+        data: data,
+      },
+    ],
+    labels: labels,
+    noData: {
+      text: 'Loading...',
+    },
+  };
+let chart=new ApexCharts(document.querySelector('.js-chart'),options)
+chart.render()
+}
 
 //**** init ****
 const init = function(){
@@ -139,6 +176,7 @@ const init = function(){
     //loadDailyGoal();
     // listenToSocket();
     toggleNav();
+    getData();
 }
 
 
