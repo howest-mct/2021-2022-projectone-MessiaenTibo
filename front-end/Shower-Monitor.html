@@ -13,22 +13,50 @@
       integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
       crossorigin="anonymous"
     ></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            toggleNav();
+        })
+
+        function toggleNav() {
+            let toggleTrigger = document.querySelectorAll(".js-toggle-nav");
+            for (let i = 0; i < toggleTrigger.length; i++) {
+                toggleTrigger[i].addEventListener("click", function () {
+                    document.querySelector("body").classList.toggle("has-mobile-nav");
+                })
+            }
+        }
+    </script>
 </head>
 <body>
     <header class="o-row">
         <div class="o-container">
             <div class="c-header">
-                <div class="c-header__logo">
-                    <h1>Shower Monitor</h1>
+                <div class="c-header__logo">                      
+                    <h1>
+                        <svg id="water-drupple" data-name="water-drupple" xmlns="http://www.w3.org/2000/svg" width="19.845" height="33.395" viewBox="0 0 19.845 33.395">
+                        <path id="Drip" d="M737.422,297.5s-9.922,16.431-9.922,23.472a9.922,9.922,0,0,0,19.845,0C747.345,313.931,737.422,297.5,737.422,297.5Z" transform="translate(-727.5 -297.5)" fill="#1a7ae6" fill-rule="evenodd"/>
+                        <path id="Ref" d="M760.969,574.534c-.978,2.238-3.774,7.194-3.774,11.917a3.283,3.283,0,1,0,6.567,0C763.762,581.728,760.5,577.623,760.969,574.534Z" transform="translate(-755.928 -562.711)" fill="#fff" fill-rule="evenodd"/>
+                        </svg>
+                        Shower Monitor</h1>
                 </div>
-                <div class="c-nav">
-                    <nav class="c-nav u-hide">
-                        <ul class="o-list c-nav__list">
-                            <li class="c-nav-item"><a class="c-nav__link" href="./Shower-Monitor.html">Home</a></li>
-                            <li class="c-nav-item"><a class="c-nav__link"href="./Profile.html">Profile</a></li>
-                            <li class="c-nav-item"><a class="c-nav__link" href="./Loggin.html">Quit</a></li>
-                        </ul>
-                    </nav>
+                <div class="c-header-nav__disappear">
+                    <div class="c-nav">
+                        <nav class="c-nav u-hide">
+                            <ul class="o-list c-nav__list">
+                                <li class="c-nav-item"><a class="c-nav__link" href="./Shower-Monitor.html">Home</a></li>
+                                <li class="c-nav-item"><a class="c-nav__link"href="./Profile.html">Profiles</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="c-header__mobile-nav-trigger">
+                    <button class="o-button-reset c-nav-trigger js-toggle-nav">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18">
+                            <path id="navbar_mobile" d="M3,24H27V21H3v3Zm0-7.5H27v-3H3v3ZM3,6V9H27V6Z" transform="translate(-3 -6)" fill="#0000ac" fill-rule="evenodd"/>
+                          </svg>
+                          
+                    </button>
                 </div>
             </div>
         </div>
@@ -42,20 +70,19 @@
                 </div>
                 <div class="c-layout__item">
                     <h2>Water temperature</h2>
-                    <p>grafiek met temperatuur</p>
+                    <p>25°C</p>
                 </div>
                 <div class="c-layout__item">
                     <h2>Air temperature</h2>
-                    <p>grafiek met temperature</p>
+                    <p>18°C</p>
                 </div>
                 <div class="c-layout__item">
                     <H2>Daily water usage</H2>
-                    <p>grafiek met percentage water verbuik tov het doel</p>
                     <div class="container">
                         <div class="card">
                             <div class="box">
                                 <div class="percent js-daily-goal" percent="90">
-                                    <svg>
+                                    <svg class="c-circel">
                                         <circle cx="70" cy="70" r="70"></circle>
                                         <circle class="js-second-circle c-second-circle"cx="70" cy="70" r="70"></circle>
                                     </svg>
@@ -68,9 +95,8 @@
                     </div>
                 </div>
                 <div class="c-layout__item">
-                    <h2>Daily water goal</h2>
-                    <p>12 min douchen</p>
-                    <p>(mogelijkheid om dit doel aan te passen)</p>
+                    <h2>Air humidity</h2>
+                    <p>43%</p>
                 </div>
                 <div class="c-layout__item">
                     <h2>Geld bespaard</h2>
@@ -88,5 +114,33 @@
             <li>test test test</li>
         </ul>
     </footer>
+    <aside class="c-mobile-nav">
+        <div class="c-mobile-nav__bg"></div>
+        <div class="c-mobile-nav__body">
+            <div class="c-mobile-nav__header">            
+                <h1 class="c-mobile-nav-tile">
+                    <svg id="water-drupple" data-name="water-drupple" xmlns="http://www.w3.org/2000/svg" width="19.845" height="33.395" viewBox="0 0 19.845 33.395">
+                    <path id="Drip" d="M737.422,297.5s-9.922,16.431-9.922,23.472a9.922,9.922,0,0,0,19.845,0C747.345,313.931,737.422,297.5,737.422,297.5Z" transform="translate(-727.5 -297.5)" fill="#1a7ae6" fill-rule="evenodd"/>
+                    <path id="Ref" d="M760.969,574.534c-.978,2.238-3.774,7.194-3.774,11.917a3.283,3.283,0,1,0,6.567,0C763.762,581.728,760.5,577.623,760.969,574.534Z" transform="translate(-755.928 -562.711)" fill="#fff" fill-rule="evenodd"/>
+                    </svg>
+                    Shower Monitor
+                </h1>
+                <button class="o-button-reset c-nav-trigger js-toggle-nav">
+                    <svg class="c-nav-trigger__svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="c-mobile-nav__nav c-mobile-nav__nav--main">
+                <nav class="c-nav">
+                    <ul class="o-list c-nav__list">
+                        <li class="c-nav__item"><a href="#!" class="c-nav__link">Home</a></li>
+                        <li class="c-nav__item"><a href="#!" class="c-nav__link">Profiles</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </aside>
 </body>
 </html>
