@@ -120,6 +120,15 @@ const loadDailyGoal = function(){
     secondcircle.style['stroke-dashoffset'] = 440 - (440 * percent) / 100;
 }
 
+const toggleNav = function() {
+  let toggleTrigger = document.querySelectorAll(".js-toggle-nav");
+  for (let i = 0; i < toggleTrigger.length; i++) {
+      toggleTrigger[i].addEventListener("click", function () {
+          document.querySelector("body").classList.toggle("has-mobile-nav");
+      })
+  }
+}
+
 
 //**** init ****
 const init = function(){
@@ -129,6 +138,7 @@ const init = function(){
     listenToUI();
     //loadDailyGoal();
     // listenToSocket();
+    toggleNav();
 }
 
 
