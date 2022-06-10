@@ -143,6 +143,7 @@ const toggleNav = function() {
 const drawChart=function(labels,data){
   var options = {
     chart: {
+      height: "78%",
       id: 'myChart',
       type: 'line',
     },
