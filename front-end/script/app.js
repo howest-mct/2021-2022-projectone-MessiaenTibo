@@ -1,8 +1,10 @@
 'use strict';
 
 const lanIP = `${window.location.hostname}:5000`; // ip van de webserver
-// const socketio = io(lanIP);
-let dailyGoal
+const socketio = io(lanIP);
+let dailyGoal;
+let TotalGoal;
+let TodaysWaterUsage;
 
 
 
@@ -27,12 +29,29 @@ const get_WaterTemperature = function(){
   handleData(url, show_WaterTemperature)
 }
 
+const getData = function () {
+  handleData(`http://192.168.168.169:5000/api/v1/history/WaterUsage/`, showData);
+};
+
+const getTotalGoal = function () {
+  handleData(`http://192.168.168.169:5000/api/v1/TotalGoal/`, showTotalGoal);
+};
+
+const getTodaysWaterUsage = function () {
+  handleData(`http://192.168.168.169:5000/api/v1/history/TodaysWaterUsage/`, showTodaysWaterUsage);
+};
+
+const getGoal = function ()
+{
+  loadDailyGoal()
+}
 
 
 //**** show_ ****
 const show_WaterTemperature = function(jsonObject){
     const temp = document.querySelector('.watertempValue');
-    temp.innerHTML = jsonObject.Waarde + "°C";
+    const waarde = parseFloat(jsonObject.Waarde).toFixed(1)
+    temp.innerHTML = waarde + "°C";
 }
 
 const show_humidity = function(jsonObject){
@@ -47,88 +66,131 @@ const show_WaterFlow = function(jsonObject){
 
 const show_RoomTemperature = function(jsonObject){
   const humidity = document.querySelector('.roomtempValue');
-  humidity.innerHTML = jsonObject.Waarde + " °C";
+  const waarde = parseFloat(jsonObject.Waarde).toFixed(1)
+  humidity.innerHTML = waarde + " °C";
 }
 
+// const showData = function (jsonObject) {
+//   console.log(jsonObject);
+//   let converted_labels = [];
+//   let converted_data = [];
+//   for (let iphone of jsonObject) {
+//     converted_labels.push(iphone.unit);
+//     converted_data.push(iphone.price);
+//   }
+//   drawChart(converted_labels, converted_data);
+// };
+
+const showData = function (jsonObject) {
+  console.log(jsonObject);
+  let converted_labels = [];
+  let converted_data = [];
+  for (let dag of jsonObject) {
+    converted_labels.push(dag.ActieDatum);
+    converted_data.push(dag.Totaal);
+  }
+  drawChart(converted_labels, converted_data);
+};
+
+const showTotalGoal = function (jsonObject) {
+  TotalGoal = jsonObject.TotalGoal
+  getTodaysWaterUsage()
+}
+
+const showTodaysWaterUsage = function (jsonObject) {
+  TodaysWaterUsage = jsonObject.Totaal
+  getGoal()
+}
 
 
 //**** listenTo ****
 const listenToUI = function(){
-    listenToClickReadRoomTemp()
-    listenToClickReadHumidity()
-    listenToClickReadWaterFlow()
-    listenToClickReadWaterTemp()
 }
 
-const listenToClickReadRoomTemp = function(){
-    const buttons = document.querySelectorAll('.roomtemp');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik temp")
-        get_RoomTemperature()
-      })
-    }
-  }
-
-
-const listenToClickReadHumidity = function(){
-    const buttons = document.querySelectorAll('.humidity');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik humidity")
-        get_Humidity()
-      })
-    }
-  }
-
-
-  const listenToClickReadWaterFlow = function(){
-    const buttons = document.querySelectorAll('.waterflow');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik waterflow")
-        get_WaterFlow()
-      })
-    }
-  }
-
-  const listenToClickReadWaterTemp = function(){
-    const buttons = document.querySelectorAll('.watertemp');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik temp")
-        get_WaterTemperature()
-      })
-    }
-  }
 
 
 // **** socketio ****
 const listenToSocket = function(){
     socketio.on("connect", function(){
         console.log("Verbonden met socket webserver");
+        socketio.emit("F2B_new_connection")
+    });
+    socketio.on("B2F_new_data", function(){
+        console.log("Verbonden met socket webserver");
+        get_RoomTemperature()
+        get_WaterTemperature()
+        get_Humidity()
+
+        //get goal
+        getTotalGoal()
     });
 };
 
 
 // **** methods ****
 const loadDailyGoal = function(){
-    let percent = dailyGoal.getAttribute("percent");
+    let percent = parseFloat(TodaysWaterUsage) / parseFloat(TotalGoal) * 100;
     console.log(percent);
     let secondcircle = dailyGoal.querySelector(".js-second-circle");
     console.log(secondcircle);
     secondcircle.style['stroke-dashoffset'] = 440 - (440 * percent) / 100;
+    let number = dailyGoal.querySelector(".number");
+    number.innerHTML = `<H2>${parseFloat(percent).toFixed(0)}<span>%</span></H2>`
 }
 
+const toggleNav = function() {
+  let toggleTrigger = document.querySelectorAll(".js-toggle-nav");
+  for (let i = 0; i < toggleTrigger.length; i++) {
+      toggleTrigger[i].addEventListener("click", function () {
+          document.querySelector("body").classList.toggle("has-mobile-nav");
+      })
+  }
+}
+
+const drawChart=function(labels,data){
+  var options = {
+    chart: {
+      height: "78%",
+      id: 'myChart',
+      type: 'line',
+    },
+    stroke: {
+      curve: 'stepline',
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    series: [
+      {
+        name: labels,
+        data: data,
+      },
+    ],
+    labels: labels,
+    noData: {
+      text: 'Loading...',
+    },
+    tooltip:{
+      enabled: false
+    },
+    hover:{
+      mode:null
+    },
+  };
+let chart=new ApexCharts(document.querySelector('.js-chart'),options)
+chart.render()
+}
 
 //**** init ****
 const init = function(){
     console.log("Front-end loaded");
-    //dailyGoal = document.querySelector(".js-daily-goal")
+    dailyGoal = document.querySelector(".js-daily-goal")
     //console.log(dailyGoal)
     listenToUI();
     //loadDailyGoal();
-    // listenToSocket();
+    listenToSocket();
+    toggleNav();
+    getData();
 }
 
 

@@ -1,6 +1,23 @@
-/*------------------------------------*\
+/*------------------------------------\
   #FONTS
-\*------------------------------------*/
+*------------------------------------*/
+@font-face {
+  font-family: 'Oxygen';
+  font-weight: 300;
+  src: url('../fonts/Oxygen-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Oxygen';
+  font-weight: 400;
+  src: url('../fonts/Oxygen-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Oxygen';
+  font-weight: 700;
+  src: url('../fonts/Oxygen-Bold.woff2') format('woff2');
+}
 
 
 
@@ -17,7 +34,7 @@
 html {
     font-size: 16px;
     line-height: 1.5;
-    font-family: "helvetica neue", Helvetica, Arial, sans-serif;
+    font-family: 'Oxygen', sans-serif;
     color: rgb(0, 0, 172);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -33,6 +50,10 @@ body{
     position: relative;
 }
 
+aside{
+    background-color: rgb(250, 251, 252);
+}
+
 *,
 *:before,
 *:after {
@@ -44,6 +65,9 @@ body{
         font-size: 20px;
         line-height: 1.6;
     }
+}
+
+.js-chart{
 }
 
 /*
@@ -82,14 +106,37 @@ img {
 
 h1 {
     font-family: 'Times New Roman', Times, serif,;
-    font-size: 36px;
-    font-weight: normal;
+    font-size: 20px;
+    font-weight: 700;
     line-height: 40px;
-    margin: 0 0 48px;
+    margin: 0 0 24px;
+}
+
+#water-drupple{
+    display: none;
+}
+
+@media (min-width: 400px) {
+    h1{
+        font-size: 30px;
+    }
+}
+
+@media (min-width: 460px) {
+    h1{
+        font-size: 36px;
+    }
+}
+
+@media (min-width: 576px) {
+    #water-drupple{
+        display: inline;
+    }
 }
 
 h2 {
-    font-size: 23px;
+    font-size: 24px;
+    font-weight: 900;
     line-height: 32px;
     margin: 0 0 24;
 }
@@ -115,6 +162,7 @@ dl,
 table,
 address,
 figure {
+    font-weight: 300;
     margin: 0 0 24px;
 }
 
@@ -170,6 +218,19 @@ a:hover,
 a:focus {
     color: crimson;
 }
+
+.data{
+    font-size: 100px;
+    font-weight: 300;
+    color: #003cff;
+}
+
+.data-tekst{
+    font-size: 28px;
+    font-weight: 400;
+    padding: 20px;
+    color: #003cff;
+}
 /*------------------------------------*\
   #OBJECTS
 \*------------------------------------*/
@@ -182,7 +243,6 @@ a:focus {
 
 .o-row {
     padding: 24px 24px 0;
-    margin-bottom: 24px;
     display: flow-root; /* New solution! Fixes margin collapsing */
 }
 
@@ -426,6 +486,20 @@ a:focus {
 /*------------------------------------*\
   #COMPONENTS
 \*------------------------------------*/
+.c-header__mobile-nav-trigger{
+    display: none;
+}
+
+@media (max-width: 768px){
+.c-header-nav__disappear{
+    display: none;
+} 
+.c-header__mobile-nav-trigger{
+    display: block;
+}
+}
+
+
 
 /*
     Component: loggin
@@ -483,7 +557,7 @@ a:focus {
 
 .c-page{
     transform: translateX(0);
-    transition: transform 1s ease
+    transition: transform .25s ease
 }
 
 .has-mobile-nav .c-page{
@@ -498,11 +572,11 @@ a:focus {
     left: 0;
     bottom: 0;
     background-color: #fff;
-    transition: opacity 1s ease, background-color 1s ease;
+    transition: opacity .25s ease, background-color .25s ease;
 }
 
 .has-mobile-nav .c-mobile-nav__bg{
-    background-color: #202024;
+    background-color: rgb(250, 251, 252);
     opacity: 0.5;
 }
 
@@ -520,9 +594,12 @@ a:focus {
     height: 100vh;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1s;
+    transition: opacity .5s;
 }
 
+.c-mobile-nav-tile{
+    margin-bottom: 20px;
+}
 
 .has-mobile-nav .c-mobile-nav {
     opacity: 1;
@@ -533,7 +610,7 @@ a:focus {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
 }
 
 .c-mobile-nav__bg {
@@ -551,8 +628,8 @@ a:focus {
     width: 100vw;
     transform: translateX(-100%);
     opacity: 0;
-    transition: opacity 1s ease-in, transform 1s ease-in;
-    background-color: #fff;
+    transition: opacity .5s ease-in, transform .5s ease-in;
+    background-color: rgb(250, 251, 252);
 }
 
 .has-mobile-nav .c-mobile-nav__body {
@@ -631,9 +708,6 @@ a:focus {
         margin-top: 12px;
     }
 
-    .c-header__mobile-nav-trigger {
-        display: none;
-    }
 }
 
 /*
@@ -789,7 +863,7 @@ a:focus {
     width: 100%;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
     .c-nav__list {
         display: flex;
         margin-left: -16px;
@@ -808,6 +882,7 @@ a:focus {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    padding-top: 24px;
     /* justify-content: space-between; */
 }
   
@@ -1429,7 +1504,7 @@ a:focus {
 
 
 
-svg{
+.c-circel{
     position: relative;
     width: 150px;
     height: 150px;
@@ -1479,22 +1554,23 @@ svg circle:nth-child(2)
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+    color: #003cff;
 
 }
 .percent .number h2{
-    color: #777;
+    color: #003cff;
     font-weight: 700;
     font-size: 40px;
     transition: 0.5s;
 }
 .percent .number h2 span{
     font-size: 24px;
-    color: #777;
+    color: #003cff;
     transition: 0.5s;
 }
 .text{
     position: relative;
-    color: #777;
+    color: #003cff;
     margin-top: 20px;
     font-weight: 700;
     font-size: 18px;
@@ -1527,4 +1603,11 @@ main{
 
 header{
     min-height: 10vh;
+}
+
+
+@media (min-width: 768px) {
+    .c-nav{
+        display: inline-block;
+    }
 }

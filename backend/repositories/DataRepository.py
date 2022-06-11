@@ -61,3 +61,21 @@ class DataRepository:
         sql = "SELECT * FROM HistoriekBadkamer where DeviceId = 4 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)
         return result
+
+    @staticmethod
+    def read_WaterUsage():
+        sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', GebruikerId, DeviceId ,format(sum(Waarde),2) AS 'Totaal', format(avg(Waarde),2) AS 'Gemmiddelde', Commentaar FROM Projectone.Historiek WHERE DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d');"
+        result = Database.get_rows(sql)
+        return result
+
+    @staticmethod
+    def read_TotalGoal():
+        sql = "SELECT SUM(Goal) AS 'TotalGoal' FROM Projectone.Gebruiker where Magneetcontact < 5;"
+        result = Database.get_one_row(sql)
+        return result
+
+    @staticmethod
+    def read_TodaysWaterUsage():
+        sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', format(sum(Waarde),2) AS 'Totaal' FROM Projectone.Historiek where date(ActieDatum) = curdate() AND DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d')"
+        result = Database.get_one_row(sql)
+        return result
