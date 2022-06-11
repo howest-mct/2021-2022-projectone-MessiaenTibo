@@ -228,6 +228,7 @@ def Write_HumidityAndTemperature():
     DataRepository.create_HistoryBadkamer(4, datetime.now() , str(temperature), "Ingelezen kamer temperatuur")
     print(str(humidity) + "%")
     print(str(temperature) + "°C")
+    socketio.emit("B2F_new_data")
     threading.Timer(30,Write_HumidityAndTemperature).start()
 
 
@@ -290,10 +291,23 @@ def Read_data():
     if(SelectedMagnetContact!=0):
         Write_WaterTemperature()
         Write_Waterflow()
+        socketio.emit("B2F_new_data")
         threading.Timer(1,Read_data).start()
 
 
 #endregion
+
+
+
+# SOCKET.IO EVENTS
+@socketio.on('connect') #(4)
+def initial_connection():
+    print('A new client connect')
+
+@socketio.on('F2B_new_connection') #(4)
+def New_connection():
+    socketio.emit("B2F_new_data")
+
 
 
 

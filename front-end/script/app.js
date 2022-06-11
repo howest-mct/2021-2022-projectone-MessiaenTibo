@@ -1,8 +1,8 @@
 'use strict';
 
 const lanIP = `${window.location.hostname}:5000`; // ip van de webserver
-// const socketio = io(lanIP);
-let dailyGoal
+const socketio = io(lanIP);
+let dailyGoal;
 
 
 
@@ -34,7 +34,8 @@ const getData = function () {
 //**** show_ ****
 const show_WaterTemperature = function(jsonObject){
     const temp = document.querySelector('.watertempValue');
-    temp.innerHTML = jsonObject.Waarde + "°C";
+    const waarde = parseFloat(jsonObject.Waarde).toFixed(1)
+    temp.innerHTML = waarde + "°C";
 }
 
 const show_humidity = function(jsonObject){
@@ -49,7 +50,8 @@ const show_WaterFlow = function(jsonObject){
 
 const show_RoomTemperature = function(jsonObject){
   const humidity = document.querySelector('.roomtempValue');
-  humidity.innerHTML = jsonObject.Waarde + " °C";
+  const waarde = parseFloat(jsonObject.Waarde).toFixed(1)
+  humidity.innerHTML = waarde + " °C";
 }
 
 // const showData = function (jsonObject) {
@@ -76,59 +78,21 @@ const showData = function (jsonObject) {
 
 //**** listenTo ****
 const listenToUI = function(){
-    listenToClickReadRoomTemp()
-    listenToClickReadHumidity()
-    listenToClickReadWaterFlow()
-    listenToClickReadWaterTemp()
 }
 
-const listenToClickReadRoomTemp = function(){
-    const buttons = document.querySelectorAll('.roomtemp');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik temp")
-        get_RoomTemperature()
-      })
-    }
-  }
-
-
-const listenToClickReadHumidity = function(){
-    const buttons = document.querySelectorAll('.humidity');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik humidity")
-        get_Humidity()
-      })
-    }
-  }
-
-
-  const listenToClickReadWaterFlow = function(){
-    const buttons = document.querySelectorAll('.waterflow');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik waterflow")
-        get_WaterFlow()
-      })
-    }
-  }
-
-  const listenToClickReadWaterTemp = function(){
-    const buttons = document.querySelectorAll('.watertemp');
-    for(const b of buttons){
-      b.addEventListener('click', function(){
-        console.log("klik temp")
-        get_WaterTemperature()
-      })
-    }
-  }
 
 
 // **** socketio ****
 const listenToSocket = function(){
     socketio.on("connect", function(){
         console.log("Verbonden met socket webserver");
+        socketio.emit("F2B_new_connection")
+    });
+    socketio.on("B2F_new_data", function(){
+        console.log("Verbonden met socket webserver");
+        get_RoomTemperature()
+        get_WaterTemperature()
+        get_Humidity()
     });
 };
 
@@ -192,7 +156,7 @@ const init = function(){
     //console.log(dailyGoal)
     listenToUI();
     //loadDailyGoal();
-    // listenToSocket();
+    listenToSocket();
     toggleNav();
     getData();
 }
