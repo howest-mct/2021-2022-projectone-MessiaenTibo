@@ -3,6 +3,8 @@
 const lanIP = `${window.location.hostname}:5000`; // ip van de webserver
 const socketio = io(lanIP);
 let dailyGoal;
+let TotalGoal;
+let TodaysWaterUsage;
 
 
 
@@ -30,6 +32,20 @@ const get_WaterTemperature = function(){
 const getData = function () {
   handleData(`http://192.168.168.169:5000/api/v1/history/WaterUsage/`, showData);
 };
+
+const getTotalGoal = function () {
+  handleData(`http://192.168.168.169:5000/api/v1/TotalGoal/`, showTotalGoal);
+};
+
+const getTodaysWaterUsage = function () {
+  handleData(`http://192.168.168.169:5000/api/v1/history/TodaysWaterUsage/`, showTodaysWaterUsage);
+};
+
+const getGoal = function ()
+{
+  loadDailyGoal()
+}
+
 
 //**** show_ ****
 const show_WaterTemperature = function(jsonObject){
@@ -76,6 +92,17 @@ const showData = function (jsonObject) {
   drawChart(converted_labels, converted_data);
 };
 
+const showTotalGoal = function (jsonObject) {
+  TotalGoal = jsonObject.TotalGoal
+  getTodaysWaterUsage()
+}
+
+const showTodaysWaterUsage = function (jsonObject) {
+  TodaysWaterUsage = jsonObject.Totaal
+  getGoal()
+}
+
+
 //**** listenTo ****
 const listenToUI = function(){
 }
@@ -93,17 +120,22 @@ const listenToSocket = function(){
         get_RoomTemperature()
         get_WaterTemperature()
         get_Humidity()
+
+        //get goal
+        getTotalGoal()
     });
 };
 
 
 // **** methods ****
 const loadDailyGoal = function(){
-    let percent = dailyGoal.getAttribute("percent");
+    let percent = parseFloat(TodaysWaterUsage) / parseFloat(TotalGoal) * 100;
     console.log(percent);
     let secondcircle = dailyGoal.querySelector(".js-second-circle");
     console.log(secondcircle);
     secondcircle.style['stroke-dashoffset'] = 440 - (440 * percent) / 100;
+    let number = dailyGoal.querySelector(".number");
+    number.innerHTML = `<H2>${parseFloat(percent).toFixed(0)}<span>%</span></H2>`
 }
 
 const toggleNav = function() {
@@ -152,7 +184,7 @@ chart.render()
 //**** init ****
 const init = function(){
     console.log("Front-end loaded");
-    //dailyGoal = document.querySelector(".js-daily-goal")
+    dailyGoal = document.querySelector(".js-daily-goal")
     //console.log(dailyGoal)
     listenToUI();
     //loadDailyGoal();

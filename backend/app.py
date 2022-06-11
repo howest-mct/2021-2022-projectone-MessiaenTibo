@@ -159,6 +159,18 @@ def historyWaterUsage():
     if request.method == "GET":
         data = DataRepository.read_WaterUsage()
         return jsonify(data), 200
+
+@app.route(endpoint + "/history/TodaysWaterUsage/", methods=['GET'])
+def historyTodaysWaterUsage():
+    if request.method == "GET":
+        data = DataRepository.read_TodaysWaterUsage()
+        return jsonify(data), 200
+
+@app.route(endpoint + "/TotalGoal/", methods=['GET'])
+def TotalGoal():
+    if request.method == "GET":
+        data = DataRepository.read_TotalGoal()
+        return jsonify(data), 200
 #endregion
 
 
