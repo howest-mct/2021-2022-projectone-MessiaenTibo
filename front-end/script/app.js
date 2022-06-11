@@ -163,6 +163,12 @@ const drawChart=function(labels,data){
     noData: {
       text: 'Loading...',
     },
+    tooltip:{
+      enabled: false
+    },
+    hover:{
+      mode:null
+    },
   };
 let chart=new ApexCharts(document.querySelector('.js-chart'),options)
 chart.render()
