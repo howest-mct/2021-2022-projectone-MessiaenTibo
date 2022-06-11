@@ -28,7 +28,7 @@ const get_WaterTemperature = function(){
 }
 
 const getData = function () {
-  handleData(`https://www.diero.be/MCT/JSON/iphone.json`, showData);
+  handleData(`http://192.168.168.169:5000/api/v1/history/WaterUsage/`, showData);
 };
 
 //**** show_ ****
@@ -52,13 +52,24 @@ const show_RoomTemperature = function(jsonObject){
   humidity.innerHTML = jsonObject.Waarde + " °C";
 }
 
+// const showData = function (jsonObject) {
+//   console.log(jsonObject);
+//   let converted_labels = [];
+//   let converted_data = [];
+//   for (let iphone of jsonObject) {
+//     converted_labels.push(iphone.unit);
+//     converted_data.push(iphone.price);
+//   }
+//   drawChart(converted_labels, converted_data);
+// };
+
 const showData = function (jsonObject) {
   console.log(jsonObject);
   let converted_labels = [];
   let converted_data = [];
-  for (let iphone of jsonObject) {
-    converted_labels.push(iphone.unit);
-    converted_data.push(iphone.price);
+  for (let dag of jsonObject) {
+    converted_labels.push(dag.ActieDatum);
+    converted_data.push(dag.Totaal);
   }
   drawChart(converted_labels, converted_data);
 };

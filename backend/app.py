@@ -153,6 +153,12 @@ def historyRoomTemp():
     if request.method == "GET":
         data = DataRepository.read_HistoryRoomTemp()
         return jsonify(data), 200
+
+@app.route(endpoint + "/history/WaterUsage/", methods=['GET'])
+def historyWaterUsage():
+    if request.method == "GET":
+        data = DataRepository.read_WaterUsage()
+        return jsonify(data), 200
 #endregion
 
 

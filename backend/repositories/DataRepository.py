@@ -61,3 +61,9 @@ class DataRepository:
         sql = "SELECT * FROM HistoriekBadkamer where DeviceId = 4 order by Volgnummer desc limit 1"
         result = Database.get_one_row(sql)
         return result
+
+    @staticmethod
+    def read_WaterUsage():
+        sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', GebruikerId, DeviceId ,format(sum(Waarde),2) AS 'Totaal', format(avg(Waarde),2) AS 'Gemmiddelde', Commentaar FROM Projectone.Historiek WHERE DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d');"
+        result = Database.get_rows(sql)
+        return result
