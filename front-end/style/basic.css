@@ -1102,6 +1102,12 @@ a:focus {
     background-color: #fff;
 }
 
+.c-profile-picture{
+    height: 140px;
+    padding-top: 16px;
+    margin-bottom: -12px;
+}
+
 /*------------------------------------*\
   #UTILITIES
 \*------------------------------------*/
