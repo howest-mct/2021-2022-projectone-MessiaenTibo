@@ -10,35 +10,45 @@ let TodaysWaterUsage;
 
 //**** get_ ****
 const get_RoomTemperature = function(){
-    const url = "http://192.168.168.169:5000/api/v1/history/RoomTemp/"
+    //const url = "http://192.168.168.169:5000/api/v1/history/RoomTemp/" 
+    const url = `http://${lanIP}/api/v1/history/RoomTemp/`
     handleData(url, show_RoomTemperature)
   }
 
 const get_Humidity = function(){
-  const url = "http://192.168.168.169:5000/api/v1/history/Humidity/"
+  //const url = "http://192.168.168.169:5000/api/v1/history/Humidity/"
+  const url = `http://${lanIP}/api/v1/history/Humidity/`
   handleData(url, show_humidity)
 }
 
 const get_WaterFlow = function(){
-  const url = "http://192.168.168.169:5000/api/v1/history/Waterflow/"
+  //const url = "http://192.168.168.169:5000/api/v1/history/Waterflow/"
+  const url = `http://${lanIP}/api/v1/history/Waterflow/`
   handleData(url, show_WaterFlow)
 }
 
 const get_WaterTemperature = function(){
-  const url = "http://192.168.168.169:5000/api/v1/history/WaterTemp/"
+  //const url = "http://192.168.168.169:5000/api/v1/history/WaterTemp/"
+  const url = `http://${lanIP}/api/v1/history/WaterTemp/`
   handleData(url, show_WaterTemperature)
 }
 
 const getData = function () {
-  handleData(`http://192.168.168.169:5000/api/v1/history/WaterUsage/`, showData);
+  //const url = "http://192.168.168.169:5000/api/v1/history/WaterUsage/"
+  const url = `http://${lanIP}/api/v1/history/WaterUsage/`
+  handleData(url, showData);
 };
 
 const getTotalGoal = function () {
-  handleData(`http://192.168.168.169:5000/api/v1/TotalGoal/`, showTotalGoal);
+  //const url = "http://192.168.168.169:5000/api/v1/TotalGoal/"
+  const url = `http://${lanIP}/api/v1/TotalGoal/`
+  handleData(url, showTotalGoal);
 };
 
 const getTodaysWaterUsage = function () {
-  handleData(`http://192.168.168.169:5000/api/v1/history/TodaysWaterUsage/`, showTodaysWaterUsage);
+  //const url = "http://192.168.168.169:5000/api/v1/history/TodaysWaterUsage/"
+  const url = `http://${lanIP}/api/v1/history/TodaysWaterUsage/`
+  handleData(url, showTodaysWaterUsage);
 };
 
 const getGoal = function ()
@@ -183,6 +193,8 @@ chart.render()
 
 //**** init ****
 const init = function(){
+    console.log("LanIP");
+    console.log(lanIP);
     console.log("Front-end loaded");
     dailyGoal = document.querySelector(".js-daily-goal")
     //console.log(dailyGoal)
