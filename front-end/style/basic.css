@@ -1629,9 +1629,36 @@ svg circle:nth-child(2)
     stroke-dasharray: 440;
     stroke-dashoffset: 440;
 }
+svg circle:nth-child(3)
+{
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+}
+svg circle:nth-child(4)
+{
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+}
+svg circle:nth-child(5)
+{
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+}
 .card .c-second-circle{
-    stroke-dashoffset: calc(440 - (440 * 90) / 100);
-    stroke: #003cff;
+    stroke-dashoffset: calc(440 - (440 * 100) / 100);
+    stroke: #BCE0FD;
+}
+.card .c-third-circle{
+    stroke-dashoffset: calc(440 - (440 * 75) / 100);
+    stroke: #2699FB;
+}
+.card .c-fourth-circle{
+    stroke-dashoffset: calc(440 - (440 * 50) / 100);
+    stroke: #0000AC;
+}
+.card .c-fifth-circle{
+    stroke-dashoffset: calc(440 - (440 * 25) / 100);
+    stroke: #00002E;
 }
 .container{
     position: relative;

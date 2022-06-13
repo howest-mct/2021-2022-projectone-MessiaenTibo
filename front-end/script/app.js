@@ -5,6 +5,10 @@ const socketio = io(lanIP);
 let dailyGoal;
 let TotalGoal;
 let TodaysWaterUsage;
+let TodaysWaterUsageUser1 = 0;
+let TodaysWaterUsageUser2 = 0;
+let TodaysWaterUsageUser3 = 0;
+let TodaysWaterUsageUser4 = 0;
 
 
 
@@ -108,7 +112,27 @@ const showTotalGoal = function (jsonObject) {
 }
 
 const showTodaysWaterUsage = function (jsonObject) {
-  TodaysWaterUsage = jsonObject.Totaal
+  TodaysWaterUsage = 0
+  for (let dag of jsonObject) {
+    if(dag.GebruikerId == 1){
+      TodaysWaterUsageUser1 = parseInt(dag.Totaal)
+    }
+    if(dag.GebruikerId == 2){
+      TodaysWaterUsageUser2 = parseInt(dag.Totaal)
+    }
+    if(dag.GebruikerId == 3){
+      TodaysWaterUsageUser3 = parseInt(dag.Totaal)
+    }
+    if(dag.GebruikerId == 4){
+      TodaysWaterUsageUser4 = parseInt(dag.Totaal)
+    }
+  }
+  TodaysWaterUsage = TodaysWaterUsageUser1 + TodaysWaterUsageUser2 + TodaysWaterUsageUser3 + TodaysWaterUsageUser4
+  console.log(TodaysWaterUsageUser1)
+  console.log(TodaysWaterUsageUser2)
+  console.log(TodaysWaterUsageUser3)
+  console.log(TodaysWaterUsageUser4)
+  console.log(TodaysWaterUsage)
   getGoal()
 }
 
@@ -140,10 +164,21 @@ const listenToSocket = function(){
 // **** methods ****
 const loadDailyGoal = function(){
     let percent = parseFloat(TodaysWaterUsage) / parseFloat(TotalGoal) * 100;
-    console.log(percent);
+    let percent1 = parseFloat(TodaysWaterUsageUser1) / parseFloat(TotalGoal) * 100
+    let percent2 = parseFloat(TodaysWaterUsageUser1 + TodaysWaterUsageUser2) / parseFloat(TotalGoal) * 100
+    let percent3 = parseFloat(TodaysWaterUsageUser1 + TodaysWaterUsageUser2 + TodaysWaterUsageUser3) / parseFloat(TotalGoal) * 100
+    let percent4 = parseFloat(TodaysWaterUsageUser1 + TodaysWaterUsageUser2 + TodaysWaterUsageUser3 + TodaysWaterUsageUser4) / parseFloat(TotalGoal) * 100
+
     let secondcircle = dailyGoal.querySelector(".js-second-circle");
-    console.log(secondcircle);
-    secondcircle.style['stroke-dashoffset'] = 440 - (440 * percent) / 100;
+    let thirdcircle = dailyGoal.querySelector(".js-third-circle");
+    let fourthcircle = dailyGoal.querySelector(".js-fourth-circle");
+    let fifthcircle = dailyGoal.querySelector(".js-fifth-circle");
+
+    secondcircle.style['stroke-dashoffset'] = 440 - (440 * percent4) / 100;
+    thirdcircle.style['stroke-dashoffset'] = 440 - (440 * percent3) / 100;
+    fourthcircle.style['stroke-dashoffset'] = 440 - (440 * percent2) / 100;
+    fifthcircle.style['stroke-dashoffset'] = 440 - (440 * percent1) / 100;
+
     let number = dailyGoal.querySelector(".number");
     number.innerHTML = `<h4>${parseFloat(percent).toFixed(0)}<span>%</span></h4>`
 }
