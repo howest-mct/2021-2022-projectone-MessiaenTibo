@@ -145,7 +145,7 @@ const loadDailyGoal = function(){
     console.log(secondcircle);
     secondcircle.style['stroke-dashoffset'] = 440 - (440 * percent) / 100;
     let number = dailyGoal.querySelector(".number");
-    number.innerHTML = `<H2>${parseFloat(percent).toFixed(0)}<span>%</span></H2>`
+    number.innerHTML = `<h4>${parseFloat(percent).toFixed(0)}<span>%</span></h4>`
 }
 
 const toggleNav = function() {
