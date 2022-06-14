@@ -131,6 +131,12 @@ const showTodaysWaterUsage = function (jsonObject) {
   getGoal()
 }
 
+const showActiveUser = function (userId){
+  let activeUser = document.querySelector(".acive-user")
+  activeUser.innerHTML = `<h2>Active user</h2>
+  <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture 1">
+  <h4>Tibo Messiaen: 34,5 liter</h4>`
+}
 
 //**** listenTo ****
 const listenToUI = function(){
@@ -231,6 +237,7 @@ const init = function(){
     listenToSocket();
     toggleNav();
     getData();
+    showActiveUser();
 }
 
 
