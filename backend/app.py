@@ -289,8 +289,10 @@ def FindUser(x=0):
         elif(MagnetContactFourState):
             SelectedMagnetContact = 4
         print("User {} is selected".format(SelectedMagnetContact))
+        socketio.emit("B2F_new_active_user", SelectedMagnetContact)
         Read_data()
     else:
+        socketio.emit("B2F_no_active_user")
         if(MagnetContactOneState | MagnetContactTwoState | MagnetContactThreeState | MagnetContactFourState):
             print("There is only 1 user at the same time allowd!")
         else:
