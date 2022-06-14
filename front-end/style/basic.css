@@ -1157,10 +1157,15 @@ a:focus {
     background-color: #fff;
 }
 
-.c-profile-picture{
+.c-profile-picture-detail{
     height: 140px;
     margin-bottom: -12px;
     margin-top: -12px;
+}
+
+.c-profile-pictures{
+    height: 140px;
+    margin-top: 24px;
 }
 
 .c-detai{

@@ -81,7 +81,7 @@ const show_WaterFlow = function(jsonObject){
 const show_RoomTemperature = function(jsonObject){
   const humidity = document.querySelector('.roomtempValue');
   const waarde = parseFloat(jsonObject.Waarde).toFixed(1)
-  humidity.innerHTML = waarde + " °C";
+  humidity.innerHTML = waarde + "°C";
 }
 
 // const showData = function (jsonObject) {
@@ -128,11 +128,6 @@ const showTodaysWaterUsage = function (jsonObject) {
     }
   }
   TodaysWaterUsage = TodaysWaterUsageUser1 + TodaysWaterUsageUser2 + TodaysWaterUsageUser3 + TodaysWaterUsageUser4
-  console.log(TodaysWaterUsageUser1)
-  console.log(TodaysWaterUsageUser2)
-  console.log(TodaysWaterUsageUser3)
-  console.log(TodaysWaterUsageUser4)
-  console.log(TodaysWaterUsage)
   getGoal()
 }
 
@@ -228,8 +223,6 @@ chart.render()
 
 //**** init ****
 const init = function(){
-    console.log("LanIP");
-    console.log(lanIP);
     console.log("Front-end loaded");
     dailyGoal = document.querySelector(".js-daily-goal")
     //console.log(dailyGoal)
