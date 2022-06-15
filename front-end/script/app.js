@@ -9,6 +9,7 @@ let TodaysWaterUsageUser1 = 0;
 let TodaysWaterUsageUser2 = 0;
 let TodaysWaterUsageUser3 = 0;
 let TodaysWaterUsageUser4 = 0;
+let activeUser;
 
 
 
@@ -53,6 +54,12 @@ const getTodaysWaterUsage = function () {
   //const url = "http://192.168.168.169:5000/api/v1/history/TodaysWaterUsage/"
   const url = `http://${lanIP}/api/v1/history/TodaysWaterUsage/`
   handleData(url, showTodaysWaterUsage);
+};
+
+const getMagneticContactUser = function (id){
+  console.log('2😢')
+  const url = `http://${lanIP}/api/v1/MagneticContactUser/${id}`
+  handleData(url, showMagneticContactUser);
 };
 
 const getGoal = function ()
@@ -131,6 +138,35 @@ const showTodaysWaterUsage = function (jsonObject) {
   getGoal()
 }
 
+const showActiveUser = function (userId, firstname, lastname){
+  console.log('4😢')
+  let TodaysWaterUsageActiveUser = 0
+  if(userId == 1){
+    TodaysWaterUsageActiveUser = TodaysWaterUsageUser1
+  }
+  if(userId == 2){
+    TodaysWaterUsageActiveUser = TodaysWaterUsageUser2
+  }
+  if(userId == 3){
+    TodaysWaterUsageActiveUser = TodaysWaterUsageUser3
+  }
+  if(userId == 4){
+    TodaysWaterUsageActiveUser = TodaysWaterUsageUser4
+  }
+  activeUser.innerHTML = `<h2>Active user</h2>
+  <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture ${userId}">
+  <h4>${firstname} ${lastname}: ${TodaysWaterUsageActiveUser} liter</h4>`
+}
+
+const showMagneticContactUser = function (jsonObject){
+  console.log('3😢')
+  let firstname = jsonObject.Naam
+  let lastname = jsonObject.Voornaam
+  let magneetcontact = jsonObject.Magneetcontact
+  console.log(firstname)
+  console.log(lastname)
+  showActiveUser(magneetcontact, firstname, lastname);
+}
 
 //**** listenTo ****
 const listenToUI = function(){
@@ -147,11 +183,27 @@ const listenToSocket = function(){
     socketio.on("B2F_new_data", function(){
         console.log("Verbonden met socket webserver");
         get_RoomTemperature()
-        get_WaterTemperature()
+        // get_WaterTemperature()
         get_Humidity()
 
         //get goal
-        getTotalGoal()
+        // getTotalGoal()
+    });
+    socketio.on("B2F_new_data_id", function(id){
+      console.log("Verbonden met socket webserver");
+      get_RoomTemperature()
+      get_WaterTemperature()
+      get_Humidity()
+      //get goal
+      getTotalGoal()
+      //Active user
+      getMagneticContactUser(id)
+  });
+    socketio.on("B2F_new_active_user", function(userId){
+      getMagneticContactUser(userId)
+    });
+    socketio.on("B2F_no_active_user", function(){
+      RemoveActiveUser();
     });
 };
 
@@ -221,9 +273,14 @@ let chart=new ApexCharts(document.querySelector('.js-chart'),options)
 chart.render()
 }
 
+const RemoveActiveUser = function(){
+  activeUser.innerHTML = `<h1>No active user</h1>`
+}
+
 //**** init ****
 const init = function(){
     console.log("Front-end loaded");
+    activeUser = document.querySelector(".acive-user")
     dailyGoal = document.querySelector(".js-daily-goal")
     //console.log(dailyGoal)
     listenToUI();
@@ -231,6 +288,7 @@ const init = function(){
     listenToSocket();
     toggleNav();
     getData();
+    getTotalGoal()
 }
 
 

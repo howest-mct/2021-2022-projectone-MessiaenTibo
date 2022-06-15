@@ -79,3 +79,10 @@ class DataRepository:
         sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', GebruikerId ,format(sum(Waarde),2) AS 'Totaal' FROM Projectone.Historiek where date(ActieDatum) = curdate() AND DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d'), GebruikerId"
         result = Database.get_rows(sql)
         return result
+
+    @staticmethod
+    def read_MagneticContact(id):
+        sql = "SELECT Magneetcontact, Naam, Voornaam FROM Projectone.Gebruiker where Magneetcontact = %s;"
+        params = [id]
+        result = Database.get_one_row(sql, params)
+        return result
