@@ -171,6 +171,12 @@ def TotalGoal():
     if request.method == "GET":
         data = DataRepository.read_TotalGoal()
         return jsonify(data), 200
+
+@app.route(endpoint + "/MagneticContactUser/<id>", methods=['GET'])
+def MagneticContactUserById(id):
+    if request.method == "GET":
+        data = DataRepository.read_MagneticContact(id)
+        return jsonify(data), 200
 #endregion
 
 
@@ -305,7 +311,7 @@ def Read_data():
     if(SelectedMagnetContact!=0):
         Write_WaterTemperature()
         Write_Waterflow()
-        socketio.emit("B2F_new_data")
+        socketio.emit("B2F_new_data_id", SelectedMagnetContact)
         threading.Timer(1,Read_data).start()
 
 

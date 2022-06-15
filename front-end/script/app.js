@@ -56,6 +56,12 @@ const getTodaysWaterUsage = function () {
   handleData(url, showTodaysWaterUsage);
 };
 
+const getMagneticContactUser = function (id){
+  console.log('2😢')
+  const url = `http://${lanIP}/api/v1/MagneticContactUser/${id}`
+  handleData(url, showMagneticContactUser);
+};
+
 const getGoal = function ()
 {
   loadDailyGoal()
@@ -132,7 +138,8 @@ const showTodaysWaterUsage = function (jsonObject) {
   getGoal()
 }
 
-const showActiveUser = function (userId){
+const showActiveUser = function (userId, firstname, lastname){
+  console.log('4😢')
   let TodaysWaterUsageActiveUser = 0
   if(userId == 1){
     TodaysWaterUsageActiveUser = TodaysWaterUsageUser1
@@ -147,8 +154,18 @@ const showActiveUser = function (userId){
     TodaysWaterUsageActiveUser = TodaysWaterUsageUser4
   }
   activeUser.innerHTML = `<h2>Active user</h2>
-  <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture 1">
-  <h4>Tibo Messiaen: ${TodaysWaterUsageActiveUser} liter</h4>`
+  <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture ${userId}">
+  <h4>${firstname} ${lastname}: ${TodaysWaterUsageActiveUser} liter</h4>`
+}
+
+const showMagneticContactUser = function (jsonObject){
+  console.log('3😢')
+  let firstname = jsonObject.Naam
+  let lastname = jsonObject.Voornaam
+  let magneetcontact = jsonObject.Magneetcontact
+  console.log(firstname)
+  console.log(lastname)
+  showActiveUser(magneetcontact, firstname, lastname);
 }
 
 //**** listenTo ****
@@ -166,14 +183,24 @@ const listenToSocket = function(){
     socketio.on("B2F_new_data", function(){
         console.log("Verbonden met socket webserver");
         get_RoomTemperature()
-        get_WaterTemperature()
+        // get_WaterTemperature()
         get_Humidity()
 
         //get goal
-        getTotalGoal()
+        // getTotalGoal()
     });
+    socketio.on("B2F_new_data_id", function(id){
+      console.log("Verbonden met socket webserver");
+      get_RoomTemperature()
+      get_WaterTemperature()
+      get_Humidity()
+      //get goal
+      getTotalGoal()
+      //Active user
+      getMagneticContactUser(id)
+  });
     socketio.on("B2F_new_active_user", function(userId){
-      showActiveUser(userId);
+      getMagneticContactUser(userId)
     });
     socketio.on("B2F_no_active_user", function(){
       RemoveActiveUser();
@@ -261,6 +288,7 @@ const init = function(){
     listenToSocket();
     toggleNav();
     getData();
+    getTotalGoal()
 }
 
 
