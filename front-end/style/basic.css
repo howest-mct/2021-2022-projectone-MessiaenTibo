@@ -631,6 +631,7 @@ a:focus {
     opacity: 0;
     pointer-events: none;
     transition: opacity .5s;
+    z-index: 1000;
 }
 
 .c-mobile-nav-tile{

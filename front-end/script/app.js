@@ -40,6 +40,8 @@ const get_WaterTemperature = function(){
 
 const getData = function () {
   //const url = "http://192.168.168.169:5000/api/v1/history/WaterUsage/"
+  // grafiek legen
+  document.querySelector('.js-chart').innerHTML = ""
   const url = `http://${lanIP}/api/v1/history/WaterUsage/`
   handleData(url, showData);
 };
@@ -201,9 +203,11 @@ const listenToSocket = function(){
   });
     socketio.on("B2F_new_active_user", function(userId){
       getMagneticContactUser(userId)
+      getData()
     });
     socketio.on("B2F_no_active_user", function(){
       RemoveActiveUser();
+      getData()
     });
 };
 
@@ -289,6 +293,7 @@ const init = function(){
     toggleNav();
     getData();
     getTotalGoal()
+    get_WaterTemperature()
 }
 
 

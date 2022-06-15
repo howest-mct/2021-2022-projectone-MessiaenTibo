@@ -56,12 +56,16 @@ Buzzer = 180
 button = 5
 
 # LedCircle
+aantalleds = 24
 LedCircle = 26
+loadingpixel = 0
+pixels = neopixel.NeoPixel(board.D18, aantalleds)
 
 # Water Flow Sensor
 WaterFlowSensor = 21
 start_counter = 0
 WaterFlowPulsen = 0
+
 
 #endregion
 
@@ -81,13 +85,18 @@ def setup():
     GPIO.add_event_detect(MagnetContactFour, GPIO.BOTH, FindUser, bouncetime=200)
     GPIO.add_event_detect(WaterFlowSensor, GPIO.FALLING, callback=countPulse)
     #test neopixel
-    pixels = neopixel.NeoPixel(board.D18, 24)
+    # pixels = neopixel.NeoPixel(board.D18, aantalleds)
     pixels.fill(0)
     pixels[0] = (28, 28, 28)
     for i in range(23):
          #pixels[i] = (0, 0, 0)
          pixels[i+1] = (28, 28, 28)
          time.sleep(0.04)
+
+    #test neopixel
+    LedCircleLoading()
+
+
     lcd.lcdInit()
     lcd.clear_screen()
     ips = check_output(['hostname', '--all-ip-addresses']).split()
@@ -314,17 +323,26 @@ def Read_data():
         socketio.emit("B2F_new_data_id", SelectedMagnetContact)
         threading.Timer(1,Read_data).start()
 
+# loading led circle
+def LedCircleLoading():
+    global loadingpixel
+    pixels.fill(0)
+    pixels[loadingpixel] = (28, 28, 28)
+    loadingpixel = loadingpixel + 1
+    if(loadingpixel >= aantalleds):
+        loadingpixel = 0
+    threading.Timer(0.2,LedCircleLoading).start()
 
 #endregion
 
 
 
 # SOCKET.IO EVENTS
-@socketio.on('connect') #(4)
+@socketio.on('connect')
 def initial_connection():
     print('A new client connect')
 
-@socketio.on('F2B_new_connection') #(4)
+@socketio.on('F2B_new_connection')
 def New_connection():
     socketio.emit("B2F_new_data")
 
