@@ -164,6 +164,8 @@ const showActiveUser = function (userId, firstname, lastname){
   if(userId == 4){
     TodaysWaterUsageActiveUser = TodaysWaterUsageUser4
   }
+  socketio.emit("F2B_active_user_usage", TodaysWaterUsageActiveUser)
+  socketio.emit("F2B_active_user_goal", 20)
   activeUser.innerHTML = `<h2>Active user</h2>
   <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture ${userId}">
   <h4>${firstname} ${lastname}: ${TodaysWaterUsageActiveUser} liter</h4>`
@@ -223,7 +225,6 @@ const listenToSocket = function(){
         get_RoomTemperature()
         // get_WaterTemperature()
         get_Humidity()
-
         //get goal
         // getTotalGoal()
     });

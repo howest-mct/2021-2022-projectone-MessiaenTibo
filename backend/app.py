@@ -66,7 +66,9 @@ WaterFlowSensor = 21
 start_counter = 0
 WaterFlowPulsen = 0
 
-
+# active user
+ActiveUserGoal = 240
+ActiveUserUsage = 0
 #endregion
 
 
@@ -313,7 +315,11 @@ def FindUser(x=0):
         socketio.emit("B2F_new_active_user", SelectedMagnetContact)
         Read_data()
     else:
+        # first time
         socketio.emit("B2F_no_active_user")
+        # loading ledcircle reactivating
+        pixels.fill(0)
+        threading.Timer(0.2,LedCircleLoading).start()
         if(MagnetContactOneState | MagnetContactTwoState | MagnetContactThreeState | MagnetContactFourState):
             print("There is only 1 user at the same time allowd!")
         else:
@@ -327,6 +333,7 @@ def Read_data():
         Write_WaterTemperature()
         Write_Waterflow()
         socketio.emit("B2F_new_data_id", SelectedMagnetContact)
+        LedCircleProgress()
         threading.Timer(1,Read_data).start()
 
 # loading led circle
@@ -337,7 +344,26 @@ def LedCircleLoading():
     loadingpixel = loadingpixel + 1
     if(loadingpixel >= aantalleds):
         loadingpixel = 0
-    threading.Timer(0.2,LedCircleLoading).start()
+    if(SelectedMagnetContact == 0):
+        threading.Timer(0.2,LedCircleLoading).start()
+
+# progress led circle
+def LedCircleProgress():
+    global ActiveUserGoal
+    global ActiveUserUsage
+    global aantalleds
+    pixels.fill(0)
+    print('😎')
+    print('Active usage')
+    print(ActiveUserUsage)
+    print('Active goal')
+    print(ActiveUserGoal)
+    countprogressleds = round((ActiveUserUsage/ActiveUserGoal) * aantalleds)
+    if(countprogressleds < 24):
+        for i in range(countprogressleds):
+            pixels[i+1] = (28, 28, 28)
+    else:
+        pixels.fill(16711680) # 24bit rgb, 16711680 = Full brightness red
 
 #endregion
 
@@ -352,8 +378,15 @@ def initial_connection():
 def New_connection():
     socketio.emit("B2F_new_data")
 
+@socketio.on('F2B_active_user_goal')
+def total_goal(goal):
+    global ActiveUserGoal
+    ActiveUserGoal = goal
 
-
+@socketio.on('F2B_active_user_usage')
+def total_goal(usage):
+    global ActiveUserUsage
+    ActiveUserUsage = usage
 
 # START THE APP
 if __name__ == '__main__':
