@@ -181,6 +181,7 @@ const showMagneticContactUser = function (jsonObject){
 
 const showUserInfo = function(magneetcontact, firstname, lastname, email){
   console.log("4🤞")
+  document.querySelector('.js-profile-picture-placeholder').innerHTML = `<img class="c-profile-picture-detail u-inline" src="/pictures/Profile picture ${magneetcontact}.png" alt="Profile picture ${magneetcontact}"></img>`
   if(magneetcontact == 1){
     document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1" selected>Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option>`
   }
