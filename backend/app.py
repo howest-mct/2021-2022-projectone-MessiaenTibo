@@ -186,6 +186,12 @@ def MagneticContactUserById(id):
     if request.method == "GET":
         data = DataRepository.read_MagneticContact(id)
         return jsonify(data), 200
+
+@app.route(endpoint + "/UserInfo/<id>", methods=['GET'])
+def UserInfoById(id):
+    if request.method == "GET":
+        data = DataRepository.read_GebruikerById(id)
+        return jsonify(data), 200
 #endregion
 
 

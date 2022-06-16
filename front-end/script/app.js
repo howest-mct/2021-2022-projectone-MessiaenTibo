@@ -41,9 +41,12 @@ const get_WaterTemperature = function(){
 const getData = function () {
   //const url = "http://192.168.168.169:5000/api/v1/history/WaterUsage/"
   // grafiek legen
-  document.querySelector('.js-chart').innerHTML = ""
-  const url = `http://${lanIP}/api/v1/history/WaterUsage/`
-  handleData(url, showData);
+  if(document.querySelector('.js-chart') != null)
+  {
+    document.querySelector('.js-chart').innerHTML = ""
+    const url = `http://${lanIP}/api/v1/history/WaterUsage/`
+    handleData(url, showData);
+  }
 };
 
 const getTotalGoal = function () {
@@ -62,6 +65,12 @@ const getMagneticContactUser = function (id){
   console.log('2😢')
   const url = `http://${lanIP}/api/v1/MagneticContactUser/${id}`
   handleData(url, showMagneticContactUser);
+};
+
+const getUserInfoById = function (id){
+  console.log("2🤞")
+  const url = `http://${lanIP}/api/v1/UserInfo/${id}`
+  handleData(url, loadUserInfo);
 };
 
 const getGoal = function ()
@@ -170,8 +179,34 @@ const showMagneticContactUser = function (jsonObject){
   showActiveUser(magneetcontact, firstname, lastname);
 }
 
+const showUserInfo = function(magneetcontact, firstname, lastname, email){
+  console.log("4🤞")
+  if(magneetcontact == 1){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1" selected>Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option>`
+  }
+  else if(magneetcontact == 2){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2" selected>Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option>`
+  }
+  else if(magneetcontact == 3){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3" selected>Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option>`
+  }
+  else if(magneetcontact == 4){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4" selected>Magnetic Contact 4</option>`
+  }
+  document.querySelector('.js-first-name-placeholder').value = firstname
+  document.querySelector('.js-last-name-placeholder').value = lastname
+  document.querySelector('.js-email-placeholder').value = email
+}
+
 //**** listenTo ****
 const listenToUI = function(){
+  const buttons = document.querySelectorAll('.js-profile-click')
+  for (let button of buttons) {
+    button.addEventListener('click', function () {
+      const id = this.getAttribute('data-gebruiker-id')
+      window.location.href = `ProfileDetail.html?id=${id}`;
+    })
+  }
 }
 
 
@@ -234,6 +269,16 @@ const loadDailyGoal = function(){
     number.innerHTML = `<h4>${parseFloat(percent).toFixed(0)}<span>%</span></h4>`
 }
 
+const loadUserInfo = function(jsonObject){
+  console.log(jsonObject)
+  console.log("3🤞")
+  let firstname = jsonObject.Naam
+  let lastname = jsonObject.Voornaam
+  let magneetcontact = jsonObject.Magneetcontact
+  let email = jsonObject.Email
+  showUserInfo(magneetcontact, firstname, lastname, email);
+}
+
 const toggleNav = function() {
   let toggleTrigger = document.querySelectorAll(".js-toggle-nav");
   for (let i = 0; i < toggleTrigger.length; i++) {
@@ -294,6 +339,12 @@ const init = function(){
     getData();
     getTotalGoal()
     get_WaterTemperature()
+    if(document.querySelector(".js-profiledetail-page")){
+      let urlParams = new URLSearchParams(window.location.search);
+      let id = urlParams.get('id');
+      console.log("1🤞")
+      getUserInfoById(id);
+    }
 }
 
 

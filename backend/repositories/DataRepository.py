@@ -1,4 +1,5 @@
 from tkinter import W
+from unittest import result
 from .Database import Database
 
 
@@ -83,6 +84,13 @@ class DataRepository:
     @staticmethod
     def read_MagneticContact(id):
         sql = "SELECT Magneetcontact, Naam, Voornaam FROM Projectone.Gebruiker where Magneetcontact = %s;"
+        params = [id]
+        result = Database.get_one_row(sql, params)
+        return result
+
+    @staticmethod
+    def read_GebruikerById(id):
+        sql = "SELECT * FROM Projectone.Gebruiker where GebruikerId = %s;"
         params = [id]
         result = Database.get_one_row(sql, params)
         return result
