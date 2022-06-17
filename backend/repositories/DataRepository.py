@@ -1,4 +1,3 @@
-from tkinter import W
 from .Database import Database
 
 
@@ -64,7 +63,7 @@ class DataRepository:
 
     @staticmethod
     def read_WaterUsage():
-        sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', GebruikerId, DeviceId ,format(sum(Waarde),2) AS 'Totaal', format(avg(Waarde),2) AS 'Gemmiddelde', Commentaar FROM Projectone.Historiek WHERE DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d');"
+        sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', GebruikerId, DeviceId , replace(format(sum(Waarde),2) ,',','') AS 'Totaal', format(avg(Waarde),2) AS 'Gemmiddelde', Commentaar FROM Projectone.Historiek WHERE DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d');"
         result = Database.get_rows(sql)
         return result
 
@@ -76,7 +75,7 @@ class DataRepository:
 
     @staticmethod
     def read_TodaysWaterUsage():
-        sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', GebruikerId ,format(sum(Waarde),2) AS 'Totaal' FROM Projectone.Historiek where date(ActieDatum) = curdate() AND DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d'), GebruikerId"
+        sql = "SELECT DATE_FORMAT(ActieDatum, '%Y-%m-%d') AS 'ActieDatum', GebruikerId , replace(format(sum(Waarde),2) ,',','') AS 'Totaal' FROM Projectone.Historiek where date(ActieDatum) = curdate() AND DeviceId = 1 GROUP BY DATE_FORMAT(ActieDatum, '%Y%m%d'), GebruikerId"
         result = Database.get_rows(sql)
         return result
 
@@ -86,3 +85,16 @@ class DataRepository:
         params = [id]
         result = Database.get_one_row(sql, params)
         return result
+
+    @staticmethod
+    def read_GebruikerById(id):
+        sql = "SELECT * FROM Projectone.Gebruiker where GebruikerId = %s;"
+        params = [id]
+        result = Database.get_one_row(sql, params)
+        return result
+
+    @staticmethod
+    def update_User(Email, Magneetcontact, Naam, Voornaam, GebruikerId):
+        sql = "UPDATE Gebruiker SET Email = %s, Magneetcontact = %s, Naam = %s, Voornaam = %s  WHERE GebruikerID = %s;"
+        params = [Email, Magneetcontact, Naam, Voornaam, GebruikerId]
+        return Database.execute_sql(sql, params)

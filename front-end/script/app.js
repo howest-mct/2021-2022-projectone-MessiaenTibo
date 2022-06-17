@@ -40,8 +40,13 @@ const get_WaterTemperature = function(){
 
 const getData = function () {
   //const url = "http://192.168.168.169:5000/api/v1/history/WaterUsage/"
-  const url = `http://${lanIP}/api/v1/history/WaterUsage/`
-  handleData(url, showData);
+  // grafiek legen
+  if(document.querySelector('.js-chart') != null)
+  {
+    document.querySelector('.js-chart').innerHTML = ""
+    const url = `http://${lanIP}/api/v1/history/WaterUsage/`
+    handleData(url, showData);
+  }
 };
 
 const getTotalGoal = function () {
@@ -60,6 +65,12 @@ const getMagneticContactUser = function (id){
   console.log('2😢')
   const url = `http://${lanIP}/api/v1/MagneticContactUser/${id}`
   handleData(url, showMagneticContactUser);
+};
+
+const getUserInfoById = function (id){
+  console.log("2🤞")
+  const url = `http://${lanIP}/api/v1/UserInfo/${id}`
+  handleData(url, loadUserInfo);
 };
 
 const getGoal = function ()
@@ -108,7 +119,7 @@ const showData = function (jsonObject) {
   let converted_data = [];
   for (let dag of jsonObject) {
     converted_labels.push(dag.ActieDatum);
-    converted_data.push(dag.Totaal);
+    converted_data.push(parseFloat(dag.Totaal/1000).toFixed(0));
   }
   drawChart(converted_labels, converted_data);
 };
@@ -122,16 +133,16 @@ const showTodaysWaterUsage = function (jsonObject) {
   TodaysWaterUsage = 0
   for (let dag of jsonObject) {
     if(dag.GebruikerId == 1){
-      TodaysWaterUsageUser1 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser1 = parseInt(dag.Totaal/1000)
     }
     if(dag.GebruikerId == 2){
-      TodaysWaterUsageUser2 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser2 = parseInt(dag.Totaal/1000)
     }
     if(dag.GebruikerId == 3){
-      TodaysWaterUsageUser3 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser3 = parseInt(dag.Totaal/1000)
     }
     if(dag.GebruikerId == 4){
-      TodaysWaterUsageUser4 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser4 = parseInt(dag.Totaal/1000)
     }
   }
   TodaysWaterUsage = TodaysWaterUsageUser1 + TodaysWaterUsageUser2 + TodaysWaterUsageUser3 + TodaysWaterUsageUser4
@@ -153,6 +164,8 @@ const showActiveUser = function (userId, firstname, lastname){
   if(userId == 4){
     TodaysWaterUsageActiveUser = TodaysWaterUsageUser4
   }
+  socketio.emit("F2B_active_user_usage", TodaysWaterUsageActiveUser)
+  socketio.emit("F2B_active_user_goal", 60)
   activeUser.innerHTML = `<h2>Active user</h2>
   <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture ${userId}">
   <h4>${firstname} ${lastname}: ${TodaysWaterUsageActiveUser} liter</h4>`
@@ -168,11 +181,92 @@ const showMagneticContactUser = function (jsonObject){
   showActiveUser(magneetcontact, firstname, lastname);
 }
 
-//**** listenTo ****
-const listenToUI = function(){
+const showUserInfo = function(magneetcontact, firstname, lastname, email){
+  console.log("4🤞")
+  console.log(magneetcontact)
+  let urlParams = new URLSearchParams(window.location.search);
+  let id = parseInt(urlParams.get('id'));
+  document.querySelector('.js-profile-picture-placeholder').innerHTML = `<img class="c-profile-picture-detail u-inline" src="/pictures/Profile picture ${id}.png" alt="Profile picture ${id}"></img>`
+  if(magneetcontact == '')
+  {
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="" selected>No Magnetic Contact</option>`
+  }
+  else if(magneetcontact == 1){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1" selected>Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
+  }
+  else if(magneetcontact == 2){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2" selected>Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
+  }
+  else if(magneetcontact == 3){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3" selected>Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
+  }
+  else if(magneetcontact == 4){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4" selected>Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
+  }
+  document.querySelector('.js-first-name-placeholder').value = firstname
+  document.querySelector('.js-last-name-placeholder').value = lastname
+  document.querySelector('.js-email-placeholder').value = email
 }
 
+//**** listenTo ****
+const listenToUI = function(){
+  listenToclickProfile()
+  if(document.querySelector(".js-profiledetail-page")){
+    listenToClickSave()
+  }
+}
 
+const listenToclickProfile = function(){
+  const buttons = document.querySelectorAll('.js-profile-click')
+  for (let button of buttons) {
+    button.addEventListener('click', function () {
+      const id = this.getAttribute('data-gebruiker-id')
+      window.location.href = `ProfileDetail.html?id=${id}`;
+    })
+  }
+}
+
+const listenToClickSave = function(){
+  document.querySelector('.js-btn-save').addEventListener('click', function() {
+    // get gebruikerid
+    let urlParams = new URLSearchParams(window.location.search);
+    let id = parseInt(urlParams.get('id'));
+    // get magneticContact
+    let magneetcontact = document.querySelector('.js-magnetic-contact-placeholder');
+    let magneetcontactid
+    if(magneetcontact.value != ''){
+      magneetcontactid = magneetcontact.value;
+    }
+    else{
+      magneetcontactid = null
+    }
+    //
+    const jsonObject = {
+      Email: document.querySelector('.js-email-placeholder').value,
+      Magneetcontact: magneetcontactid,
+      Naam: document.querySelector('.js-last-name-placeholder').value,
+      Voornaam: document.querySelector('.js-first-name-placeholder').value,
+      GebruikerId: id,
+    };
+    console.log(jsonObject)
+    handleData(`http://${lanIP}/api/v1/Users/`,
+    callbackSave,
+    null,
+    'PUT',
+    JSON.stringify(jsonObject))
+  });
+}
+
+// call_backs
+const callbackSave = function (data) {
+  console.log(data.status);
+  // htmlMelding.classList.remove('u-hide');
+  // htmlMelding.innerHTML = data.status;
+  // let delay = 5000;
+  // setTimeout(function () {
+  //   htmlMelding.classList.add('u-hide');
+  // }, delay);
+};
 
 // **** socketio ****
 const listenToSocket = function(){
@@ -185,7 +279,6 @@ const listenToSocket = function(){
         get_RoomTemperature()
         // get_WaterTemperature()
         get_Humidity()
-
         //get goal
         // getTotalGoal()
     });
@@ -201,9 +294,11 @@ const listenToSocket = function(){
   });
     socketio.on("B2F_new_active_user", function(userId){
       getMagneticContactUser(userId)
+      getData()
     });
     socketio.on("B2F_no_active_user", function(){
       RemoveActiveUser();
+      getData()
     });
 };
 
@@ -228,6 +323,22 @@ const loadDailyGoal = function(){
 
     let number = dailyGoal.querySelector(".number");
     number.innerHTML = `<h4>${parseFloat(percent).toFixed(0)}<span>%</span></h4>`
+}
+
+const loadUserInfo = function(jsonObject){
+  console.log(jsonObject)
+  console.log("3🤞")
+  let firstname = jsonObject.Voornaam
+  let lastname = jsonObject.Naam
+  let magneetcontact
+  if(jsonObject.Magneetcontact != null){
+    magneetcontact = jsonObject.Magneetcontact
+  }
+  else{
+    magneetcontact = ''
+  }
+  let email = jsonObject.Email
+  showUserInfo(magneetcontact, firstname, lastname, email);
 }
 
 const toggleNav = function() {
@@ -289,6 +400,13 @@ const init = function(){
     toggleNav();
     getData();
     getTotalGoal()
+    get_WaterTemperature()
+    if(document.querySelector(".js-profiledetail-page")){
+      let urlParams = new URLSearchParams(window.location.search);
+      let id = urlParams.get('id');
+      console.log("1🤞")
+      getUserInfoById(id);
+    }
 }
 
 

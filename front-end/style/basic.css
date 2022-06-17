@@ -267,6 +267,7 @@ a:focus {
 }
 
 
+
 /*------------------------------------*\
   #OBJECTS
 \*------------------------------------*/
@@ -631,6 +632,7 @@ a:focus {
     opacity: 0;
     pointer-events: none;
     transition: opacity .5s;
+    z-index: 1000;
 }
 
 .c-mobile-nav-tile{
@@ -1501,6 +1503,12 @@ a:focus {
     margin: 24px 0 0 0;
 }
 
+.u-is-invalid {
+    background-color: #f00 !important;
+    color: #fff !important;
+  }
+
+  
 /*------------------------------------*\
   #MEDIA
 \*------------------------------------*/

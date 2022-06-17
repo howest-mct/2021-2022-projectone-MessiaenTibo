@@ -56,13 +56,20 @@ Buzzer = 180
 button = 5
 
 # LedCircle
+aantalleds = 24
 LedCircle = 26
+loadingpixel = 0
+pixels = neopixel.NeoPixel(board.D18, aantalleds)
+LedCircleThread = False
 
 # Water Flow Sensor
 WaterFlowSensor = 21
 start_counter = 0
 WaterFlowPulsen = 0
 
+# active user
+ActiveUserGoal = 240
+ActiveUserUsage = 0
 #endregion
 
 
@@ -81,13 +88,18 @@ def setup():
     GPIO.add_event_detect(MagnetContactFour, GPIO.BOTH, FindUser, bouncetime=200)
     GPIO.add_event_detect(WaterFlowSensor, GPIO.FALLING, callback=countPulse)
     #test neopixel
-    pixels = neopixel.NeoPixel(board.D18, 24)
+    # pixels = neopixel.NeoPixel(board.D18, aantalleds)
     pixels.fill(0)
     pixels[0] = (28, 28, 28)
     for i in range(23):
          #pixels[i] = (0, 0, 0)
          pixels[i+1] = (28, 28, 28)
          time.sleep(0.04)
+
+    #test neopixel
+    LedCircleLoading()
+
+
     lcd.lcdInit()
     lcd.clear_screen()
     ips = check_output(['hostname', '--all-ip-addresses']).split()
@@ -177,6 +189,30 @@ def MagneticContactUserById(id):
     if request.method == "GET":
         data = DataRepository.read_MagneticContact(id)
         return jsonify(data), 200
+
+@app.route(endpoint + "/UserInfo/<id>", methods=['GET'])
+def UserInfoById(id):
+    if request.method == "GET":
+        data = DataRepository.read_GebruikerById(id)
+        return jsonify(data), 200
+
+@app.route(endpoint + "/Users/", methods=['PUT'])
+def Users():
+    if request.method == "PUT":
+        info = DataRepository.json_or_formdata(request)
+        print(info)
+        data =  DataRepository.update_User(info['Email'], info['Magneetcontact'], info['Naam'], info['Voornaam'], info['GebruikerId'])
+        print('👌')
+        print(data)
+        status = ""
+        if data <= -1:
+            status = "ERROR"
+        elif data == 0:
+            status = "Er is niks aangepast."
+        elif data >= 1:
+            status = "Het is gelukt."
+        return jsonify(status=status), 200
+
 #endregion
 
 
@@ -280,6 +316,7 @@ def countPulse(pin):
 # Find User
 def FindUser(x=0):
     global SelectedMagnetContact
+    global LedCircleThread
     SelectedMagnetContact = 0
     MagnetContactOneState = GPIO.input(MagnetContactOne)
     MagnetContactTwoState = GPIO.input(MagnetContactTwo)
@@ -298,7 +335,13 @@ def FindUser(x=0):
         socketio.emit("B2F_new_active_user", SelectedMagnetContact)
         Read_data()
     else:
+        # first time
         socketio.emit("B2F_no_active_user")
+        # loading ledcircle reactivating
+        pixels.fill(0)
+        if(LedCircleThread == False):
+            LedCircleThread = True
+            threading.Timer(0.2,LedCircleLoading).start()
         if(MagnetContactOneState | MagnetContactTwoState | MagnetContactThreeState | MagnetContactFourState):
             print("There is only 1 user at the same time allowd!")
         else:
@@ -312,24 +355,64 @@ def Read_data():
         Write_WaterTemperature()
         Write_Waterflow()
         socketio.emit("B2F_new_data_id", SelectedMagnetContact)
+        LedCircleProgress()
         threading.Timer(1,Read_data).start()
 
+# loading led circle
+def LedCircleLoading():
+    global loadingpixel
+    global LedCircleThread
+    pixels.fill(0)
+    pixels[loadingpixel] = (28, 28, 28)
+    loadingpixel = loadingpixel + 1
+    if(loadingpixel >= aantalleds):
+        loadingpixel = 0
+    if(SelectedMagnetContact == 0):
+        threading.Timer(0.2,LedCircleLoading).start()
+    else:
+        LedCircleThread = False
+
+# progress led circle
+def LedCircleProgress():
+    global ActiveUserGoal
+    global ActiveUserUsage
+    global aantalleds
+    pixels.fill(0)
+    print('😎')
+    print('Active usage')
+    print(ActiveUserUsage)
+    print('Active goal')
+    print(ActiveUserGoal)
+    countprogressleds = round((ActiveUserUsage/ActiveUserGoal) * aantalleds)
+    if(countprogressleds < 24):
+        for i in range(countprogressleds):
+            # pixels[i+1] = (28, 28, 28)
+            pixels[i+1] = ( i*10, 28, 0)
+    else:
+        pixels.fill(16711680) # 24bit rgb, 16711680 = Full brightness red
 
 #endregion
 
 
 
 # SOCKET.IO EVENTS
-@socketio.on('connect') #(4)
+@socketio.on('connect')
 def initial_connection():
     print('A new client connect')
 
-@socketio.on('F2B_new_connection') #(4)
+@socketio.on('F2B_new_connection')
 def New_connection():
     socketio.emit("B2F_new_data")
 
+@socketio.on('F2B_active_user_goal')
+def total_goal(goal):
+    global ActiveUserGoal
+    ActiveUserGoal = goal
 
-
+@socketio.on('F2B_active_user_usage')
+def total_goal(usage):
+    global ActiveUserUsage
+    ActiveUserUsage = usage
 
 # START THE APP
 if __name__ == '__main__':
