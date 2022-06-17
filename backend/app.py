@@ -60,6 +60,7 @@ aantalleds = 24
 LedCircle = 26
 loadingpixel = 0
 pixels = neopixel.NeoPixel(board.D18, aantalleds)
+LedCircleThread = False
 
 # Water Flow Sensor
 WaterFlowSensor = 21
@@ -297,6 +298,7 @@ def countPulse(pin):
 # Find User
 def FindUser(x=0):
     global SelectedMagnetContact
+    global LedCircleThread
     SelectedMagnetContact = 0
     MagnetContactOneState = GPIO.input(MagnetContactOne)
     MagnetContactTwoState = GPIO.input(MagnetContactTwo)
@@ -319,7 +321,9 @@ def FindUser(x=0):
         socketio.emit("B2F_no_active_user")
         # loading ledcircle reactivating
         pixels.fill(0)
-        threading.Timer(0.2,LedCircleLoading).start()
+        if(LedCircleThread == False):
+            LedCircleThread = True
+            threading.Timer(0.2,LedCircleLoading).start()
         if(MagnetContactOneState | MagnetContactTwoState | MagnetContactThreeState | MagnetContactFourState):
             print("There is only 1 user at the same time allowd!")
         else:
@@ -339,6 +343,7 @@ def Read_data():
 # loading led circle
 def LedCircleLoading():
     global loadingpixel
+    global LedCircleThread
     pixels.fill(0)
     pixels[loadingpixel] = (28, 28, 28)
     loadingpixel = loadingpixel + 1
@@ -346,6 +351,8 @@ def LedCircleLoading():
         loadingpixel = 0
     if(SelectedMagnetContact == 0):
         threading.Timer(0.2,LedCircleLoading).start()
+    else:
+        LedCircleThread = False
 
 # progress led circle
 def LedCircleProgress():
