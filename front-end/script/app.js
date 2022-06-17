@@ -149,7 +149,7 @@ const showTodaysWaterUsage = function (jsonObject) {
   getGoal()
 }
 
-const showActiveUser = function (userId, firstname, lastname){
+const showActiveUser = function (userId, firstname, lastname, goal){
   console.log('4😢')
   let TodaysWaterUsageActiveUser = 0
   if(userId == 1){
@@ -165,7 +165,7 @@ const showActiveUser = function (userId, firstname, lastname){
     TodaysWaterUsageActiveUser = TodaysWaterUsageUser4
   }
   socketio.emit("F2B_active_user_usage", TodaysWaterUsageActiveUser)
-  socketio.emit("F2B_active_user_goal", 60)
+  socketio.emit("F2B_active_user_goal", goal)
   activeUser.innerHTML = `<h2>Active user</h2>
   <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture ${userId}">
   <h4>${firstname} ${lastname}: ${TodaysWaterUsageActiveUser} liter</h4>`
@@ -176,9 +176,10 @@ const showMagneticContactUser = function (jsonObject){
   let firstname = jsonObject.Naam
   let lastname = jsonObject.Voornaam
   let magneetcontact = jsonObject.Magneetcontact
+  let goal = jsonObject.Goal
   console.log(firstname)
   console.log(lastname)
-  showActiveUser(magneetcontact, firstname, lastname);
+  showActiveUser(magneetcontact, firstname, lastname, goal);
 }
 
 const showUserInfo = function(magneetcontact, firstname, lastname, email){

@@ -81,7 +81,7 @@ class DataRepository:
 
     @staticmethod
     def read_MagneticContact(id):
-        sql = "SELECT Magneetcontact, Naam, Voornaam FROM Projectone.Gebruiker where Magneetcontact = %s;"
+        sql = "SELECT Magneetcontact, Naam, Voornaam, Goal FROM Projectone.Gebruiker where Magneetcontact = %s;"
         params = [id]
         result = Database.get_one_row(sql, params)
         return result
