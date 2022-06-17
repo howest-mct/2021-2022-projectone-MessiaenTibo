@@ -195,6 +195,24 @@ def UserInfoById(id):
     if request.method == "GET":
         data = DataRepository.read_GebruikerById(id)
         return jsonify(data), 200
+
+@app.route(endpoint + "/Users/", methods=['PUT'])
+def Users():
+    if request.method == "PUT":
+        info = DataRepository.json_or_formdata(request)
+        print(info)
+        data =  DataRepository.update_User(info['Email'], info['Magneetcontact'], info['Naam'], info['Voornaam'], info['GebruikerId'])
+        print('👌')
+        print(data)
+        status = ""
+        if data <= -1:
+            status = "ERROR"
+        elif data == 0:
+            status = "Er is niks aangepast."
+        elif data >= 1:
+            status = "Het is gelukt."
+        return jsonify(status=status), 200
+
 #endregion
 
 
@@ -368,7 +386,8 @@ def LedCircleProgress():
     countprogressleds = round((ActiveUserUsage/ActiveUserGoal) * aantalleds)
     if(countprogressleds < 24):
         for i in range(countprogressleds):
-            pixels[i+1] = (28, 28, 28)
+            # pixels[i+1] = (28, 28, 28)
+            pixels[i+1] = ( i*10, 28, 0)
     else:
         pixels.fill(16711680) # 24bit rgb, 16711680 = Full brightness red
 

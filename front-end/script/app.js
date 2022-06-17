@@ -119,7 +119,7 @@ const showData = function (jsonObject) {
   let converted_data = [];
   for (let dag of jsonObject) {
     converted_labels.push(dag.ActieDatum);
-    converted_data.push(dag.Totaal);
+    converted_data.push(parseFloat(dag.Totaal/1000).toFixed(0));
   }
   drawChart(converted_labels, converted_data);
 };
@@ -133,16 +133,16 @@ const showTodaysWaterUsage = function (jsonObject) {
   TodaysWaterUsage = 0
   for (let dag of jsonObject) {
     if(dag.GebruikerId == 1){
-      TodaysWaterUsageUser1 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser1 = parseInt(dag.Totaal/1000)
     }
     if(dag.GebruikerId == 2){
-      TodaysWaterUsageUser2 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser2 = parseInt(dag.Totaal/1000)
     }
     if(dag.GebruikerId == 3){
-      TodaysWaterUsageUser3 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser3 = parseInt(dag.Totaal/1000)
     }
     if(dag.GebruikerId == 4){
-      TodaysWaterUsageUser4 = parseInt(dag.Totaal)
+      TodaysWaterUsageUser4 = parseInt(dag.Totaal/1000)
     }
   }
   TodaysWaterUsage = TodaysWaterUsageUser1 + TodaysWaterUsageUser2 + TodaysWaterUsageUser3 + TodaysWaterUsageUser4
@@ -165,7 +165,7 @@ const showActiveUser = function (userId, firstname, lastname){
     TodaysWaterUsageActiveUser = TodaysWaterUsageUser4
   }
   socketio.emit("F2B_active_user_usage", TodaysWaterUsageActiveUser)
-  socketio.emit("F2B_active_user_goal", 20)
+  socketio.emit("F2B_active_user_goal", 60)
   activeUser.innerHTML = `<h2>Active user</h2>
   <img class="c-profile-pictures" src="/pictures/Profile picture ${userId}.png" alt="Profile picture ${userId}">
   <h4>${firstname} ${lastname}: ${TodaysWaterUsageActiveUser} liter</h4>`
@@ -203,6 +203,13 @@ const showUserInfo = function(magneetcontact, firstname, lastname, email){
 
 //**** listenTo ****
 const listenToUI = function(){
+  listenToclickProfile()
+  if(document.querySelector(".js-profiledetail-page")){
+    listenToClickSave()
+  }
+}
+
+const listenToclickProfile = function(){
   const buttons = document.querySelectorAll('.js-profile-click')
   for (let button of buttons) {
     button.addEventListener('click', function () {
@@ -212,7 +219,41 @@ const listenToUI = function(){
   }
 }
 
+const listenToClickSave = function(){
+  document.querySelector('.js-btn-save').addEventListener('click', function() {
+    // get gebruikerid
+    let urlParams = new URLSearchParams(window.location.search);
+    let id = parseInt(urlParams.get('id'));
+    // get magneticContact
+    let magneetcontact = document.querySelector('.js-magnetic-contact-placeholder');
+    let magneetcontactid = magneetcontact.selectedIndex + 1;
+    //
+    const jsonObject = {
+      Email: document.querySelector('.js-email-placeholder').value,
+      Magneetcontact: magneetcontactid,
+      Naam: document.querySelector('.js-last-name-placeholder').value,
+      Voornaam: document.querySelector('.js-first-name-placeholder').value,
+      GebruikerId: id,
+    };
+    console.log(jsonObject)
+    handleData(`http://${lanIP}/api/v1/Users/`,
+    callbackSave,
+    null,
+    'PUT',
+    JSON.stringify(jsonObject))
+  });
+}
 
+// call_backs
+const callbackSave = function (data) {
+  console.log(data.status);
+  // htmlMelding.classList.remove('u-hide');
+  // htmlMelding.innerHTML = data.status;
+  // let delay = 5000;
+  // setTimeout(function () {
+  //   htmlMelding.classList.add('u-hide');
+  // }, delay);
+};
 
 // **** socketio ****
 const listenToSocket = function(){
@@ -274,8 +315,8 @@ const loadDailyGoal = function(){
 const loadUserInfo = function(jsonObject){
   console.log(jsonObject)
   console.log("3🤞")
-  let firstname = jsonObject.Naam
-  let lastname = jsonObject.Voornaam
+  let firstname = jsonObject.Voornaam
+  let lastname = jsonObject.Naam
   let magneetcontact = jsonObject.Magneetcontact
   let email = jsonObject.Email
   showUserInfo(magneetcontact, firstname, lastname, email);
