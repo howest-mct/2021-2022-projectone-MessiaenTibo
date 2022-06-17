@@ -183,18 +183,25 @@ const showMagneticContactUser = function (jsonObject){
 
 const showUserInfo = function(magneetcontact, firstname, lastname, email){
   console.log("4🤞")
-  document.querySelector('.js-profile-picture-placeholder').innerHTML = `<img class="c-profile-picture-detail u-inline" src="/pictures/Profile picture ${magneetcontact}.png" alt="Profile picture ${magneetcontact}"></img>`
-  if(magneetcontact == 1){
-    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1" selected>Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option>`
+  console.log(magneetcontact)
+  let urlParams = new URLSearchParams(window.location.search);
+  let id = parseInt(urlParams.get('id'));
+  document.querySelector('.js-profile-picture-placeholder').innerHTML = `<img class="c-profile-picture-detail u-inline" src="/pictures/Profile picture ${id}.png" alt="Profile picture ${id}"></img>`
+  if(magneetcontact == '')
+  {
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="" selected>No Magnetic Contact</option>`
+  }
+  else if(magneetcontact == 1){
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1" selected>Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
   }
   else if(magneetcontact == 2){
-    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2" selected>Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option>`
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2" selected>Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
   }
   else if(magneetcontact == 3){
-    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3" selected>Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option>`
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3" selected>Magnetic Contact 3</option><option value="4">Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
   }
   else if(magneetcontact == 4){
-    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4" selected>Magnetic Contact 4</option>`
+    document.querySelector('.js-magnetic-contact-placeholder').innerHTML = `<option value="1">Magnetic Contact 1</option> <option value="2">Magnetic Contact 2</option> <option value="3">Magnetic Contact 3</option><option value="4" selected>Magnetic Contact 4</option><option value="">No Magnetic Contact</option>`
   }
   document.querySelector('.js-first-name-placeholder').value = firstname
   document.querySelector('.js-last-name-placeholder').value = lastname
@@ -226,7 +233,13 @@ const listenToClickSave = function(){
     let id = parseInt(urlParams.get('id'));
     // get magneticContact
     let magneetcontact = document.querySelector('.js-magnetic-contact-placeholder');
-    let magneetcontactid = magneetcontact.selectedIndex + 1;
+    let magneetcontactid
+    if(magneetcontact.value != ''){
+      magneetcontactid = magneetcontact.value;
+    }
+    else{
+      magneetcontactid = null
+    }
     //
     const jsonObject = {
       Email: document.querySelector('.js-email-placeholder').value,
@@ -317,7 +330,13 @@ const loadUserInfo = function(jsonObject){
   console.log("3🤞")
   let firstname = jsonObject.Voornaam
   let lastname = jsonObject.Naam
-  let magneetcontact = jsonObject.Magneetcontact
+  let magneetcontact
+  if(jsonObject.Magneetcontact != null){
+    magneetcontact = jsonObject.Magneetcontact
+  }
+  else{
+    magneetcontact = ''
+  }
   let email = jsonObject.Email
   showUserInfo(magneetcontact, firstname, lastname, email);
 }
