@@ -31,7 +31,8 @@ CORS(app)
 endpoint = '/api/v1'
 
 # OneWire (GPIO 4)
-sensor_file_name = '/sys/bus/w1/devices/28-22cf61000900/w1_slave'
+# sensor_file_name = '/sys/bus/w1/devices/28-22cf61000900/w1_slave'
+sensor_file_name = '/sys/bus/w1/devices/28-01215cea8519/w1_slave'
 
 # MagnetContacts
 MagnetContactOne = 17 #was 18 is nu aangepast voor neopixelring
