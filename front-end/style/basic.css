@@ -1205,6 +1205,10 @@ a:focus {
 /*------------------------------------*\
   #UTILITIES
 \*------------------------------------*/
+.u-padding-top{
+    padding-top: 8px;
+}
+
 .u-inline{
     display: inline;
 }
@@ -1682,7 +1686,10 @@ svg circle:nth-child(5)
     justify-content: space-around;
 }
 
-
+.box{
+    display: flex;
+    justify-content: center;
+}
 
 .percent{
     position: relative;
@@ -1691,6 +1698,7 @@ svg circle:nth-child(5)
     border-radius: 50%;
     background: white;
     z-index: 1000;
+    margin: 12px
 }
 .percent .number{
     position: absolute;
@@ -1768,4 +1776,25 @@ header{
     line-height: 40px;
     margin: 0 0 24px;
     text-decoration: none;
+}
+
+.magnet-contact-1{
+    color: #BCE0FD;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.magnet-contact-2{
+    color: #2699FB;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.magnet-contact-3{
+    color: #0000AC;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+.magnet-contact-4{
+    color: #00002E;
+    margin-left: 12px;
+    margin-right: 12px;
 }
