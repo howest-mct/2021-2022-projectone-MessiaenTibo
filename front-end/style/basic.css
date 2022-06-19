@@ -66,6 +66,9 @@ aside{
         line-height: 1.6;
     }
 }
+button:active{
+    transform: translateY(4px);
+}
 
 .js-chart{
 }
@@ -217,12 +220,12 @@ a {
 
 a:visited, /*LoVe befor Hate (visited en active voor hover en focus)*/
 a:active {
-    color: blueviolet;
+    /* color: blueviolet; */
 }
 
 a:hover,
 a:focus {
-    color: crimson;
+    /* color: crimson; */
 }
 
 .data{
@@ -1755,4 +1758,14 @@ header{
     .c-nav{
         display: inline-block;
     }
+}
+
+
+.title {
+    color: #0000AC;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 40px;
+    margin: 0 0 24px;
+    text-decoration: none;
 }

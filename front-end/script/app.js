@@ -263,10 +263,11 @@ const callbackSave = function (data) {
   console.log(data.status);
   // htmlMelding.classList.remove('u-hide');
   // htmlMelding.innerHTML = data.status;
-  // let delay = 5000;
-  // setTimeout(function () {
-  //   htmlMelding.classList.add('u-hide');
-  // }, delay);
+  document.querySelector('.js-btn-save').innerHTML = `${data.status}`
+  let delay = 1500;
+  setTimeout(function () {
+    document.querySelector('.js-btn-save').innerHTML = "Save"
+  }, delay);
 };
 
 // **** socketio ****

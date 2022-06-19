@@ -51,7 +51,7 @@ SelectedMagnetContact = 0
 dhtDevice = adafruit_dht.DHT11(board.D12, use_pulseio=False)
 
 # Buzzer
-Buzzer = 180
+Buzzer = 16
 
 # Button
 button = 5
@@ -78,6 +78,7 @@ ActiveUserUsage = 0
 #region **** SETUP ****
 def setup():
     GPIO.setmode(GPIO.BCM)
+    GPIO.setup(Buzzer, GPIO.OUT)
     GPIO.setup(MagnetContactOne, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactTwo, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactThree, GPIO.IN, GPIO.PUD_DOWN)
@@ -99,7 +100,6 @@ def setup():
 
     #test neopixel
     LedCircleLoading()
-
 
     lcd.lcdInit()
     lcd.clear_screen()
@@ -209,9 +209,9 @@ def Users():
         if data <= -1:
             status = "ERROR"
         elif data == 0:
-            status = "Er is niks aangepast."
+            status = "No changes"
         elif data >= 1:
-            status = "Het is gelukt."
+            status = "Saving.."
         return jsonify(status=status), 200
 
 #endregion
@@ -223,12 +223,15 @@ def Users():
 #region **** METHODS ****
 # OneWire
 def read_temperature():
-    temperature = ''
-    sensor_file = open(sensor_file_name,'r')
-    for line in sensor_file:
-        if 't=' in line: 
-            temperature = line[29] + line[30] + "." + line[31]+ line[32]+ line[33]
-    print(temperature)
+    try:
+        temperature = ''
+        sensor_file = open(sensor_file_name,'r')
+        for line in sensor_file:
+            if 't=' in line: 
+                temperature = line[29] + line[30] + "." + line[31]+ line[32]+ line[33]
+        print(temperature)
+    except:
+        pass
     return temperature
 
 def Write_WaterTemperature():
@@ -378,6 +381,7 @@ def LedCircleProgress():
     global ActiveUserGoal
     global ActiveUserUsage
     global aantalleds
+    global Buzzer
     pixels.fill(0)
     print('😎')
     print('Active usage')
@@ -391,6 +395,10 @@ def LedCircleProgress():
             pixels[i+1] = ( i*10, 28, 0)
     else:
         pixels.fill(16711680) # 24bit rgb, 16711680 = Full brightness red
+        GPIO.output(Buzzer,GPIO.HIGH)
+        # time.sleep(1.5)
+        # GPIO.output(Buzzer,GPIO.LOW)
+        
 
 #endregion
 
