@@ -64,10 +64,11 @@ class lcd:
     def lcdInit(self):
         i2c.write_byte(0x38,0)#e=0
         lcd.sent_instructions(self,0b0010)
-        lcd.sent_instructions(self,0b00001111)
+        lcd.sent_instructions(self,0b00001100)
         lcd.sent_instructions(self,0b00000001)
     # verchilende carakters verzenden
     def write_message(self,velue):
+        lcd.aantal=0
         for i in range(len(velue)):
             lcd.sent_characters(self,velue[i])
     # cursor verzetten

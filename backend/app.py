@@ -425,6 +425,13 @@ def total_goal(usage):
 
 # START THE APP
 if __name__ == '__main__':
-    print("backend running")
-    setup()
-    socketio.run(app, debug=False, host='0.0.0.0')
+    try:
+        print("backend running")
+        setup()
+        socketio.run(app, debug=False, host='0.0.0.0')
+    except KeyboardInterrupt:
+        print('KeyboardInterrupt exception is caught')
+    finally:
+        lcd.clear_screen()
+        lcd.sent_instructions(0b00111000)
+        GPIO.cleanup()
