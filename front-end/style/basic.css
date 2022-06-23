@@ -1782,19 +1782,39 @@ header{
     color: #BCE0FD;
     margin-left: 12px;
     margin-right: 12px;
+    display: none;
 }
 .magnet-contact-2{
     color: #2699FB;
     margin-left: 12px;
     margin-right: 12px;
+    display: none;
 }
 .magnet-contact-3{
     color: #0000AC;
     margin-left: 12px;
     margin-right: 12px;
+    display: none;
 }
 .magnet-contact-4{
     color: #00002E;
     margin-left: 12px;
     margin-right: 12px;
+    display: none;
+}
+
+
+@media (min-width: 525px) {
+    .magnet-contact-1{
+        display: flex;
+    }
+    .magnet-contact-2{
+        display: flex;
+    }
+    .magnet-contact-3{
+        display: flex;
+    }
+    .magnet-contact-4{
+        display: flex;
+    }
 }

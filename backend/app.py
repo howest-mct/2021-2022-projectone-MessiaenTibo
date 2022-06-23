@@ -51,7 +51,7 @@ SelectedMagnetContact = 0
 dhtDevice = adafruit_dht.DHT11(board.D12, use_pulseio=False)
 
 # Buzzer
-Buzzer = 16
+Buzzer = 180
 
 # Button
 button = 5
@@ -78,7 +78,7 @@ ActiveUserUsage = 0
 #region **** SETUP ****
 def setup():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(Buzzer, GPIO.OUT)
+    # GPIO.setup(Buzzer, GPIO.OUT)
     GPIO.setup(MagnetContactOne, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactTwo, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(MagnetContactThree, GPIO.IN, GPIO.PUD_DOWN)
@@ -381,7 +381,6 @@ def LedCircleProgress():
     global ActiveUserGoal
     global ActiveUserUsage
     global aantalleds
-    global Buzzer
     pixels.fill(0)
     print('😎')
     print('Active usage')
@@ -395,9 +394,6 @@ def LedCircleProgress():
             pixels[i+1] = ( i*10, 28, 0)
     else:
         pixels.fill(16711680) # 24bit rgb, 16711680 = Full brightness red
-        GPIO.output(Buzzer,GPIO.HIGH)
-        # time.sleep(1.5)
-        # GPIO.output(Buzzer,GPIO.LOW)
         
 
 #endregion
