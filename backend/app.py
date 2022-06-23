@@ -202,7 +202,7 @@ def Users():
     if request.method == "PUT":
         info = DataRepository.json_or_formdata(request)
         print(info)
-        data =  DataRepository.update_User(info['Email'], info['Magneetcontact'], info['Naam'], info['Voornaam'], info['GebruikerId'])
+        data =  DataRepository.update_User(info['Email'], info['Magneetcontact'], info['Naam'], info['Voornaam'], info['Goal'], info['GebruikerId'])
         print('👌')
         print(data)
         status = ""

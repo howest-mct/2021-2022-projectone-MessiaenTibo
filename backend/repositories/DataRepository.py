@@ -94,7 +94,7 @@ class DataRepository:
         return result
 
     @staticmethod
-    def update_User(Email, Magneetcontact, Naam, Voornaam, GebruikerId):
-        sql = "UPDATE Gebruiker SET Email = %s, Magneetcontact = %s, Naam = %s, Voornaam = %s  WHERE GebruikerID = %s;"
-        params = [Email, Magneetcontact, Naam, Voornaam, GebruikerId]
+    def update_User(Email, Magneetcontact, Naam, Voornaam, Goal, GebruikerId):
+        sql = "UPDATE Gebruiker SET Email = %s, Magneetcontact = %s, Naam = %s, Voornaam = %s, Goal = %s  WHERE GebruikerID = %s;"
+        params = [Email, Magneetcontact, Naam, Voornaam, Goal, GebruikerId]
         return Database.execute_sql(sql, params)

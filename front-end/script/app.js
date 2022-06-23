@@ -182,7 +182,7 @@ const showMagneticContactUser = function (jsonObject){
   showActiveUser(magneetcontact, firstname, lastname, goal);
 }
 
-const showUserInfo = function(magneetcontact, firstname, lastname, email){
+const showUserInfo = function(magneetcontact, firstname, lastname, goal, email){
   console.log("4🤞")
   console.log(magneetcontact)
   let urlParams = new URLSearchParams(window.location.search);
@@ -206,6 +206,7 @@ const showUserInfo = function(magneetcontact, firstname, lastname, email){
   }
   document.querySelector('.js-first-name-placeholder').value = firstname
   document.querySelector('.js-last-name-placeholder').value = lastname
+  document.querySelector('.js-goal-placeholder').value = goal
   document.querySelector('.js-email-placeholder').value = email
 }
 
@@ -247,6 +248,7 @@ const listenToClickSave = function(){
       Magneetcontact: magneetcontactid,
       Naam: document.querySelector('.js-last-name-placeholder').value,
       Voornaam: document.querySelector('.js-first-name-placeholder').value,
+      Goal: document.querySelector('.js-goal-placeholder').value,
       GebruikerId: id,
     };
     console.log(jsonObject)
@@ -333,6 +335,7 @@ const loadUserInfo = function(jsonObject){
   let firstname = jsonObject.Voornaam
   let lastname = jsonObject.Naam
   let magneetcontact
+  let goal = jsonObject.Goal
   if(jsonObject.Magneetcontact != null){
     magneetcontact = jsonObject.Magneetcontact
   }
@@ -340,7 +343,7 @@ const loadUserInfo = function(jsonObject){
     magneetcontact = ''
   }
   let email = jsonObject.Email
-  showUserInfo(magneetcontact, firstname, lastname, email);
+  showUserInfo(magneetcontact, firstname, lastname, goal, email);
 }
 
 const toggleNav = function() {
